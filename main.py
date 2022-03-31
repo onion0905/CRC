@@ -1,9 +1,19 @@
 #!/usr/bin/env python3
-import pygame
+
+from pygame.display import set_mode, update, set_caption, set_icon
+from pygame.transform import scale, rotate
+from pygame.image import load
+from pygame.mixer import music
+from pygame.draw import rect, line
+from pygame import init, Rect, QUIT, MOUSEBUTTONDOWN, K_d, K_f, K_j, K_k, K_a
+from pygame.mouse import get_pos
+from pygame.key import get_pressed
+from pygame.event import get
 from time import time, sleep
+from subprocess import run
 
 # intialize
-pygame.init()
+init() # pygame.init()
 
 # Global Variable
 display_ratio = 2 # (640 * ratio, 360 * ratio)
@@ -16,38 +26,38 @@ control = 0
 ex_control = control
 
 # set screen
-screen = pygame.display.set_mode((640 * display_ratio, 360 * display_ratio))
+screen = set_mode((640 * display_ratio, 360 * display_ratio))
 
 # background
-cover_image = pygame.image.load("images\\cover_image.jpg")
-floor_1_image = pygame.image.load("images\\1F.png")
-frame = pygame.image.load("images\\example.png")
-sure_to_quit_image = pygame.image.load("images\\sure_to_exit.png")
+cover_image = load("images\\cover_image.jpg") # pygame.image.load()
+floor_1_image = load("images\\1F.png")
+frame = load("images\\example.png")
+sure_to_quit_image = load("images\\sure_to_exit.png")
 background_paper = [cover_image, floor_1_image]
 
 # Title and Icon
-pygame.display.set_caption("CRC")
-logo = pygame.image.load("images/logo.jpg")
-pygame.display.set_icon(logo)
+set_caption("CRC") # pygame.display.set_caption()
+logo = load("images/logo.jpg") # pygame.image.load()
+set_icon(logo) # pygame.display.set_icon
 
 # Objects
 keys = []
-quit_icon = pygame.image.load("images\\quit.png")
-quit_icon = pygame.transform.scale(quit_icon, (60 * display_ratio, 24 * display_ratio))
-player_front = pygame.image.load("images\\player_front.png")
-player_left0 = pygame.image.load("images\\player_left0.png")
-player_left1 = pygame.image.load("images\\player_left1.png")
-player_left2 = pygame.image.load("images\\player_left2.png")
-player_right0 = pygame.image.load("images\\player_right0.png")
-player_right1 = pygame.image.load("images\\player_right1.png")
-player_right2 = pygame.image.load("images\\player_right2.png")
-player_front = pygame.transform.scale(player_front, (140, 196)) # 450 * 11/38 * display_ratio
-player_left0 = pygame.transform.scale(player_left0, (130, 196))
-player_left1 = pygame.transform.scale(player_left1, (130, 196))
-player_left2 = pygame.transform.scale(player_left2, (130, 196))
-player_right0 = pygame.transform.scale(player_right0, (130, 196))
-player_right1 = pygame.transform.scale(player_right1, (130, 196))
-player_right2 = pygame.transform.scale(player_right2, (130, 196))
+quit_icon = load("images\\quit.png") # pygame.image.load()
+quit_icon = scale(quit_icon, (60 * display_ratio, 24 * display_ratio)) # pygame.transform.scale
+player_front = load("images\\player_front.png")
+player_left0 = load("images\\player_left0.png")
+player_left1 = load("images\\player_left1.png")
+player_left2 = load("images\\player_left2.png")
+player_right0 = load("images\\player_right0.png")
+player_right1 = load("images\\player_right1.png")
+player_right2 = load("images\\player_right2.png")
+player_front = scale(player_front, (140, 196)) # 450 * 11/38 * display_ratio
+player_left0 = scale(player_left0, (130, 196))
+player_left1 = scale(player_left1, (130, 196))
+player_left2 = scale(player_left2, (130, 196))
+player_right0 = scale(player_right0, (130, 196))
+player_right1 = scale(player_right1, (130, 196))
+player_right2 = scale(player_right2, (130, 196))
 player_images = [[player_front], [player_left0, player_left1, player_left2], [player_right0, player_right1, player_right2]]
 
 
@@ -56,28 +66,28 @@ mode = "normal" # "normal" or "hard"
 drop_before_arrive = 0.8
 pixel_per_second = 565 / drop_before_arrive
 
-mayo = pygame.image.load("images\mayo.webp")
+mayo = load("images\mayo.webp") # pygame.image.load()
 mayo.convert()
-start_menu = pygame.image.load("images\patrick_mayo.jpg")
+start_menu = load("images\patrick_mayo.jpg")
 start_menu.convert()
-start_menu = pygame.transform.scale(start_menu, (800, 600))
-start_button = pygame.image.load("images\start_button.png")
+start_menu = scale(start_menu, (800, 600)) # pygame.transform.scale
+start_button = load("images\start_button.png")
 start_button.convert()
-start_button = pygame.transform.scale(start_button, (200, 100))
-mayo = pygame.transform.rotate(mayo, 90)
-mayo = pygame.transform.scale(mayo, (100, 100))
+start_button = scale(start_button, (200, 100))
+mayo = rotate(mayo, 90) # pygame.transform.rotate
+mayo = scale(mayo, (100, 100))
 
 slot = (125, 30)
-rect = pygame.Rect(200, 0, 10, 600)
-white_back = pygame.Rect(0, 0, 800, 600)
-border_left_line = pygame.Rect(140, 0, 10, 600)
-border_right_line = pygame.Rect(650, 0, 10, 600)
-display_pressed1 = pygame.Rect(150, 500, slot[0], slot[1])
-display_pressed2 = pygame.Rect(275, 500, slot[0], slot[1])
-display_pressed3 = pygame.Rect(400, 500, slot[0], slot[1])
-display_pressed4 = pygame.Rect(525, 500, slot[0], slot[1])
-music = "images\\ver.hard.mp3"
-track = pygame.mixer.music.load(music)
+rect = Rect(200, 0, 10, 600) # pygame.Rect()
+white_back = Rect(0, 0, 800, 600)
+border_left_line = Rect(140, 0, 10, 600)
+border_right_line = Rect(650, 0, 10, 600)
+display_pressed1 = Rect(150, 500, slot[0], slot[1])
+display_pressed2 = Rect(275, 500, slot[0], slot[1])
+display_pressed3 = Rect(400, 500, slot[0], slot[1])
+display_pressed4 = Rect(525, 500, slot[0], slot[1])
+music_mp3 = "images\\ver.hard.mp3"
+track = music.load(music_mp3) # pygame.mixer.music.load()
 
 times_arrive = []
 times_drop = []
@@ -116,20 +126,20 @@ def check_remove(time_pass, showing_array_i, prev_key, block):
     return block_check and time_check and prev_check
 
 def draw_back():
-    pygame.draw.rect(screen, (107, 186, 241), white_back)
-    pygame.draw.rect(screen, (255, 255, 0), border_left_line)
-    pygame.draw.rect(screen, (255, 255, 0), border_right_line)
+    rect(screen, (107, 186, 241), white_back) # pygame.draw.rect()
+    rect(screen, (255, 255, 0), border_left_line)
+    rect(screen, (255, 255, 0), border_right_line)
     
-    pygame.draw.line(screen, (255, 255, 255), (275, 0),(275, 600))
-    pygame.draw.line(screen, (255, 255, 255), (400, 0),(400, 600))
-    pygame.draw.line(screen, (255, 255, 255), (525, 0),(525, 600))
+    line(screen, (255, 255, 255), (275, 0),(275, 600)) # pygame.draw.line()
+    line(screen, (255, 255, 255), (400, 0),(400, 600))
+    line(screen, (255, 255, 255), (525, 0),(525, 600))
     
-    pygame.draw.line(screen, (100, 100, 100), (150, 500),(650, 500))
-    pygame.draw.line(screen, (100, 100, 100), (150, 530),(650, 530))
+    line(screen, (100, 100, 100), (150, 500),(650, 500))
+    line(screen, (100, 100, 100), (150, 530),(650, 530))
 
 def mayo_main():
-    pygame.init()
-    screen = pygame.display.set_mode((800, 600))
+    init() # pygame.init()
+    screen = set_mode((800, 600)) # pygame.display.set_mode
     running = True
     back = 0
     mouse = ""
@@ -145,7 +155,7 @@ def mayo_main():
     note_now = 0
     end_cnt = 0
     while running:
-        mouse_pos = pygame.mouse.get_pos()
+        mouse_pos = get_pos() # pygame.mouse.get_pos()
         now_time = time()
         if not started:
             start_time = now_time
@@ -160,60 +170,60 @@ def mayo_main():
             if mouse == "down":
                 if mouse_pos[0] > 300 and mouse_pos[0] < 500 and mouse_pos[1] > 100 and mouse_pos[1] < 400:
                     back = 1
-                    pygame.mixer.music.set_volume(0.1)
-                    pygame.mixer.music.play()
+                    music.set_volume(0.1) # pygame.mixer.music.set_volume()
+                    music.play() # pygame.mixer.music.play()
                     started = True
                     start_time = time()
 
         # pygame events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+        for event in get(): # pygame.event.get()
+            if event.type == QUIT: #pygame.QUIT
                 running = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == MOUSEBUTTONDOWN: # pygame.MOUSEBUTTONDOWN
                 mouse = "down"
                 print(mouse)
-            if event.type != pygame.MOUSEBUTTONDOWN:
+            if event.type != MOUSEBUTTONDOWN:
                 mouse = ""
 
         # pressed key displaying
-        keys = pygame.key.get_pressed()
+        keys = get_pressed() # pygame.key.get_pressed()
         for i in range(len(showing_array)):
             In = True
             if i <= len(showing_array) - 1 and check_remove(time_pass, showing_array[i], prev_key[showing_array[i][4]], 0) \
-                and keys[pygame.K_d]:
+                and keys[K_d]: # pygame.K_d
                 showing_array[i][1] = 2000
                 showing_array[i][2] = 2000
                 showing_array[i][5] = 1
             if i <= len(showing_array) - 1 and check_remove(time_pass, showing_array[i], prev_key[showing_array[i][4]], 1) \
-                and keys[pygame.K_f]:
+                and keys[K_f]: # pygame.K_f
                 showing_array[i][1] = 2000
                 showing_array[i][2] = 2000
                 showing_array[i][5] = 1
             if i <= len(showing_array) - 1 and check_remove(time_pass, showing_array[i], prev_key[showing_array[i][4]], 2) \
-                and keys[pygame.K_j]:
+                and keys[K_j]: # pygame.K_j
                 showing_array[i][1] = 2000
                 showing_array[i][2] = 2000
                 showing_array[i][5] = 1
             if i <= len(showing_array) - 1 and check_remove(time_pass, showing_array[i], prev_key[showing_array[i][4]], 3) \
-                and keys[pygame.K_k]:
+                and keys[K_k]: # pygame.K_k
                 showing_array[i][1] = 2000
                 showing_array[i][2] = 2000
                 showing_array[i][5] = 1
-        if keys[pygame.K_d]:
-            pygame.draw.rect(screen, (99, 170, 219), display_pressed1)
-        if not keys[pygame.K_d]:
+        if keys[K_d]:
+            rect(screen, (99, 170, 219), display_pressed1) # pygame.draw.rect()
+        if not keys[K_d]:
             prev_key[0] = 0
-        if keys[pygame.K_f]:
-            pygame.draw.rect(screen, (99, 170, 219), display_pressed2)
-        if not keys[pygame.K_f]:
+        if keys[K_f]:
+            rect(screen, (99, 170, 219), display_pressed2)
+        if not keys[K_f]:
             prev_key[1] = 0
-        if keys[pygame.K_j]:
-            pygame.draw.rect(screen, (99, 170, 219), display_pressed3)
-        if not keys[pygame.K_j]:
+        if keys[K_j]:
+            rect(screen, (99, 170, 219), display_pressed3)
+        if not keys[K_j]:
             prev_key[2] = 0
-        if keys[pygame.K_k]:
-            pygame.draw.rect(screen, (99, 170, 219), display_pressed4)
-        if not keys[pygame.K_k]:
+        if keys[K_k]:
+            rect(screen, (99, 170, 219), display_pressed4)
+        if not keys[K_k]:
             prev_key[3] = 0
         while pointer < len(times_drop) and time_pass <= (times_drop[pointer])+0.1 and time_pass >= (times_drop[pointer])-0.1 and not ended:
             data_array = []
@@ -253,7 +263,7 @@ def mayo_main():
                     combo = 0
 
         combo = 0
-        pygame.display.update()
+        update() # pygame.display.update()
         now_end_time = time()
         now_end_time = round(now_end_time, 4)
         time_loop = now_end_time - now_time
@@ -264,32 +274,50 @@ def mayo_main():
     return
 
 # Functions
+def tell_story():
+    screen.blit(frame, (0, 0))
+    input()
+    return
+    # call story 1
+    # call scene_1
+    # call dia 1
+    # call battle 1
+    # call story 2
+
+
 def control_flow(cur_control, started):
     if cur_control == -1:
         return -1
     elif started == 0 and mouse == "down":
+        # tell_story()
         return 1
     elif not started:
         return 0
-    elif cur_control == 1: # and tp
-        # call story 1
-        # call dia 1
-        # call battle 1
-        return 4
+    # elif cur_control == 1: # and tp
+    #     tell_story()
+    #     # call story 1
+    #     return 4
     # elif cur_control == 4: # and tp
+    #     # call dia 1
+    #     # call battle 1
+    #     # call story 2
+    #     return 2
 
-    # else:
-    #     return cur_control
+
+    else:
+        return cur_control
     
 
 def sure_to_quit(ex_control):
     global running
     global control
     global screen
-    mayo_main()
-    control = ex_control
-    screen = pygame.display.set_mode((640 * display_ratio, 360 * display_ratio))
-    return
+    # tell_story()
+    # mayo_main()
+    # control = ex_control
+    # screen = pygame.display.set_mode((640 * display_ratio, 360 * display_ratio))
+    # run("basic_io.exe")
+    # return
     if control == -1:
         if mouse_pos[0] > 592 and mouse_pos[0] < 778 \
             and mouse_pos[1] > 480 and mouse_pos[1] < 555 and mouse == "down":
@@ -323,9 +351,9 @@ def background_display(control, scene, scene_x):
 
 
 def player_display(control, player_x, time_frame):
-    if keys[pygame.K_d]:
+    if keys[K_d]: # pygame.K_d
         side = 2
-    elif keys[pygame.K_a]:
+    elif keys[K_a]:
         side = 1
     else:
         side = 0
@@ -344,14 +372,14 @@ def scroll_walk():
     global scene_x
     global player_x
     border_r = 2320 - 640 * display_ratio
-    if keys[pygame.K_d]:
+    if keys[K_d]: # pygame.K_d
         if player_x + 10 <= 320 * display_ratio - 70:
             player_x += 10
         elif scene_x - 10 >= -border_r:
             scene_x -= 10
         elif player_x + 140 + 10 <= 640 * display_ratio:
             player_x += 10
-    elif keys[pygame.K_a]:
+    elif keys[K_a]: # pygame.K_a
         if player_x - 10 >= 320 * display_ratio - 70:
             player_x -= 10
         elif scene_x + 10 <= -5:
@@ -363,14 +391,14 @@ def scroll_walk():
 def pygame_event_response(mouse_pos):
     global running
     global mouse
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    for event in get(): # pygame.event.get()
+        if event.type == QUIT: # pygame.QUIT
             check_quit(mouse_pos)
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == MOUSEBUTTONDOWN: # pygame.MOUSEBUTTONDOWN
             mouse = "down"
             print(mouse_pos)
             check_quit(mouse_pos)
-        if event.type != pygame.MOUSEBUTTONDOWN:
+        if event.type != MOUSEBUTTONDOWN:
             mouse = ""
 
 
@@ -379,8 +407,8 @@ background = background_paper[0]
 started = 0
 while running:
     # Basic Info
-    keys = pygame.key.get_pressed()
-    mouse_pos = pygame.mouse.get_pos()
+    keys = get_pressed() # pygame.key.get_pressed()
+    mouse_pos = get_pos() # pygame.mouse.get_pos()
     scroll_walk()
     pygame_event_response(mouse_pos)
     time_frame = (time_frame + 1) % 20
@@ -393,4 +421,4 @@ while running:
     # background fill
     background_display(control, background_paper[control], scene_x)
     player_display(control, player_x, time_frame)
-    pygame.display.update()
+    update() # pygame.display.update()
