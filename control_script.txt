@@ -1,0 +1,30 @@
+elif cur_control == 1 and check_tp(player_x):
+    Plot.plot_1()
+    return 4
+elif cur_control == 4 and check_tp(player_x) and not floor4_entered:
+    Dialogue.dia_1()
+    # battle 1
+    Plot.plot_2()
+    floor4_entered = True
+    return 2
+elif cur_control == 2 and check_tp(player_x):
+    Dialogue.dia_2()
+    Dialogue.dia_3()
+    Dialogue.dia_4()
+    # battle 2
+    Dialogue.dia_5()
+    return 3
+elif cur_control == 3 and check_tp(player_x):
+    Dialogue.dia_6()
+    mayo_main() # battle 3
+    Dialogue.dia_7()
+    Plot.plot_3()
+    return 4
+elif cur_control == 4 and check_tp(player_x) and floor4_entered:
+    Dialogue.dia_8()
+    # battle 4
+    Dialogue.dia_9()
+    Dialogue.dia_10()
+    # battle 5
+    Dialogue.dia_11()
+    Plot.plot_5()
