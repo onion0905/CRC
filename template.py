@@ -7,12 +7,10 @@ import subprocess
 pygame.init()
 
 # set screen
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((1280, 720))
 print(pygame.FULLSCREEN)
 
 # background
-floor_1_image = pygame.image.load("CRC\images\\1F.png")
-frame = pygame.image.load("CRC\images\hsryr.png")
 # frame = pygame.transform.scale(frame, (1200, 800))
 
 # Title and Icon //Skyclick
@@ -21,13 +19,13 @@ pygame.display.set_caption("CRC")
 # pygame.display.set_icon(icon)
 
 # Objects
-quit_icon = pygame.image.load("CRC\images\\quit2.jpg")
-
+sure_to_exit = pygame.image.load("images\sure_to_exit.png")
+plot_2_0 = pygame.image.load("images\plot\plot_2_0.png")
 # Game Loop
 running = True
 mouse = ""
 x = 0
-background = frame
+background = sure_to_exit
 while running:
     # Basic Info
     keys = pygame.key.get_pressed()
@@ -37,7 +35,8 @@ while running:
     screen.fill((0, 0, 0))
 
     # background fill
-    screen.blit(background, (0, 0))
+    screen.blit(background, (100, 40))
+    screen.blit(plot_2_0, (-300, -200))
 
     # quit event
     for event in pygame.event.get():
@@ -45,7 +44,6 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse = "down"
-            subprocess.run("./test.exe")
             print(x)
         if event.type != pygame.MOUSEBUTTONDOWN:
             mouse = ""
