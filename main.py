@@ -31,7 +31,7 @@ floor_passed = 1
 floor4_entered = False
 
 # set screen
-screen = set_mode((640 * display_ratio, 360 * display_ratio))
+screen = set_mode((640 * display_ratio, 360 * display_ratio)) # pygame.display.set_mode()
 
 # background
 cover_image = load("images\\cover_image.jpg") # pygame.image.load()
@@ -160,6 +160,7 @@ def draw_back():
     line(screen, (100, 100, 100), (150, 530),(650, 530))
 
 def mayo_main():
+    global screen
     init() # pygame.init()
     screen = set_mode((800, 600)) # pygame.display.set_mode
     running = True
@@ -293,6 +294,7 @@ def mayo_main():
             sleep(0.001-time_loop)
         if time_pass > 10: # remember to change
             break
+    screen = set_mode((640 * display_ratio, 360 * display_ratio))
     return
 
 
@@ -338,7 +340,7 @@ class Plot :
     def plot_5(self):
         plot_5_0 = load("images\\plot\\plot_5_0.png")
         plot_5_0 = scale(plot_5_0, (1280, 720))
-        screen.blit(plot_5_0.jpg, (0,0)) # 之後，你成為了下一任電神，在你的帶領之下，組織不再繼續作亂，反而變成喜歡不斷的教導程式能力，培養人才的組織，這就是我們現在的社團—CRC電算社
+        screen.blit(plot_5_0, (0,0)) # 之後，你成為了下一任電神，在你的帶領之下，組織不再繼續作亂，反而變成喜歡不斷的教導程式能力，培養人才的組織，這就是我們現在的社團—CRC電算社
         update()
         check_mouse()
 
@@ -395,14 +397,14 @@ class Dialogue :
         dia_3_3 = load("images\\dia\\dia_3\\dia_3_3.png")
         dia_3_4 = load("images\\dia\\dia_3\\dia_3_4.png")
         dia_3_5 = load("images\\dia\\dia_3\\dia_3_5.png")
-        dia_3_6 = load("images\\dia\\dia_3\\dia_3_6.png")
+        # dia_3_6 = load("images\\dia\\dia_3\\dia_3_6.png")
         dia_3_0 = scale(dia_3_0, (1280, 720))
         dia_3_1 = scale(dia_3_1, (1280, 720))
         dia_3_2 = scale(dia_3_2, (1280, 720))
         dia_3_3 = scale(dia_3_3, (1280, 720))
         dia_3_4 = scale(dia_3_4, (1280, 720))
         dia_3_5 = scale(dia_3_5, (1280, 720))
-        dia_3_6 = scale(dia_3_6, (1280, 720))
+        # dia_3_6 = scale(dia_3_6, (1280, 720))
         # screen.blit(foxyy_image, (0,0)) # foxyy 開心表情
         screen.blit(dia_3_0, (0,0)) # foxyy：「我們是CRC！」
         update()
@@ -427,9 +429,9 @@ class Dialogue :
         update()
         check_mouse()
         # screen.blit(player_image, (0,0)) # player 和 bright 開心表情
-        screen.blit(dia_3_6, (0,0)) # （你聽完後對程式擁有了更濃厚的興趣，同時Bright似乎也有意教導你）
-        update()
-        check_mouse()
+        # screen.blit(dia_3_6, (0,0)) # （你聽完後對程式擁有了更濃厚的興趣，同時Bright似乎也有意教導你）
+        # update()
+        # check_mouse()
     def dia_4(self):
         dia_4_0 = load("images\\dia\\dia_4\\dia_4_0.png")
         dia_4_1 = load("images\\dia\\dia_4\\dia_4_1.png")
@@ -728,7 +730,7 @@ def control_flow(cur_control, started):
     elif not started:
         return 0
     elif cur_control == 1 and check_tp(player_x, floor_passed):
-        cutscene()
+        cutscene("jump")
         plot.plot_1()
         floor_passed = 0
         return 4
@@ -737,22 +739,49 @@ def control_flow(cur_control, started):
         # battle 1
         floor4_entered = True
         floor_passed = 1
-        cutscene()
+        cutscene(0)
         plot.plot_2()
-        cutscene()
+        cutscene(0)
         floor_passed = 0
         return 2
     elif cur_control == 2 and check_npc_event(control, scene_x, floor_passed):
+        cutscene(0)
         dialogue.dia_2()
         dialogue.dia_3()
         dialogue.dia_4()
         # battle 2
         dialogue.dia_5()
         floor_passed = 1
+        cutscene(0)
         return 2
     elif cur_control == 2 and check_tp(player_x, floor_passed):
-        cutscene()
+        floor_passed = 0
+        cutscene("jump")
         return 3
+    elif cur_control == 3 and check_npc_event(control, scene_x, floor_passed):
+        cutscene(0)
+        dialogue.dia_6()
+        mayo_main() # battle 3
+        dialogue.dia_7()
+        plot.plot_3()
+        cutscene(0)
+        floor_passed = 1
+        return 3
+    elif cur_control == 3 and check_tp(player_x, floor_passed):
+        floor_passed = 0
+        cutscene("jump")
+        return 4
+    elif cur_control == 4 and check_npc_event(control, scene_x, floor_passed) and floor4_entered:
+        dialogue.dia_8()
+        # battle 4
+        dialogue.dia_9()
+        dialogue.dia_10()
+        # battle 5
+        dialogue.dia_11()
+        plot.plot_5()
+        floor_passed = 1
+        print("遊戲結束:D, 謝謝你的參與:D")
+        return 1
     else:
         return cur_control
 
@@ -870,13 +899,14 @@ def tp_display(control, scene_x, time_frame, floor_passed):
         screen.blit(tp_point_image2, (90 + scene_x, 285))
         screen.blit(tp_point_image2, (2050 + scene_x, 285))
 
-def cutscene():
+def cutscene(mode):
     global player_x
     global scene_x
     screen.fill((0, 0, 0))
     update()
     sleep(1)
-    player_x = 320 * display_ratio - 70
+    if mode == "jump":
+        player_x = 320 * display_ratio - 70
     scene_x = -5
     print(player_x)
 
