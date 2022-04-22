@@ -17,7 +17,7 @@ from time import time, sleep
 init() # pygame.init()
 
 # Global Variable
-display_ratio = 2 # (640 * ratio, 360 * ratio)
+display_ratio = 3 # (640 * ratio, 360 * ratio)
 speed = (display_ratio - 1) * 10
 running = True
 mouse = ""
@@ -837,15 +837,17 @@ def check_quit(mouse_pos): # 0 for running, 1 for breaking
         running = True
 
 
-def check_tp(player_x, floor_passed):
+def check_tp(player_x, floor_passed): # Return an integer, 1 for down floor, 2 for up
     global control
     if floor_passed:
-        if player_x <= 260 or player_x >= 515 * display_ratio:
-            return True
+        if player_x <= 260:
+            return 1
+        if player_x >= 515 * display_ratio:
+            return 2
         else:
-            return False
+            return 0
     else:
-        return False
+        return 0
 
 
 def check_npc_event(control, scene_x, floor_passed):
