@@ -17,7 +17,7 @@ from time import time, sleep
 init() # pygame.init()
 
 # Global Variable
-display_ratio = 3 # (640 * ratio, 360 * ratio)
+display_ratio = 2 # (640 * ratio, 360 * ratio)
 speed = (display_ratio - 1) * 10
 running = True
 mouse = ""
