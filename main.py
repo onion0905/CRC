@@ -4,7 +4,7 @@ from pygame.transform import scale, rotate
 from pygame.image import load
 from pygame.mixer import music
 from pygame.draw import rect as draw_rect, line
-from pygame import init, Rect, QUIT, MOUSEBUTTONDOWN, K_d, K_f, K_j, K_k, K_a
+from pygame import init, Rect, QUIT, MOUSEBUTTONDOWN, K_d, K_f, K_j, K_k, K_a, K_f
 from pygame.mouse import get_pos
 from pygame.key import get_pressed
 from pygame.event import get
@@ -17,7 +17,7 @@ from time import time, sleep
 init() # pygame.init()
 
 # Global Variable
-display_ratio = 2 # (640 * ratio, 360 * ratio)
+display_ratio = 3 # (640 * ratio, 360 * ratio)
 speed = (display_ratio - 1) * 10
 running = True
 mouse = ""
@@ -26,20 +26,25 @@ player_x = 320 * display_ratio - 70
 time_frame = 0
 control = 0
 ex_control = control
-print_flag = 0
 started = 0
 floor_passed = 1
 floor4_entered = False
+next_floor = 4
 
 # set screen
 screen = set_mode((640 * display_ratio, 360 * display_ratio)) # pygame.display.set_mode()
 
 # background
 cover_image = load("images\\cover_image.png") # pygame.image.load()
+sure_to_quit_image = load("images\\sure_to_exit.png")
 floor_1_image = load("images\\1F.png")
 floor_2_image = load("images\\2F.png")
 floor_3_image = load("images\\3F.png")
 floor_4_image = load("images\\4F.png")
+arrow_down = load("images\\arrow_down.png")
+arrow_up = load("images\\arrow_up.png")
+arrow_down = scale(arrow_down, (60 * display_ratio, 40 * display_ratio))
+arrow_up = scale(arrow_up, (60 * display_ratio, 40 * display_ratio))
 if display_ratio != 3:
     cover_image = scale(cover_image, (640 * display_ratio, 360 * display_ratio))
     floor_1_image = scale(floor_1_image, (1153 * display_ratio, 360 * display_ratio))
@@ -47,8 +52,8 @@ if display_ratio != 3:
     floor_3_image = scale(floor_3_image, (1153 * display_ratio, 360 * display_ratio))
     floor_4_image = scale(floor_4_image, (1153 * display_ratio, 360 * display_ratio))
 frame = load("images\\example.png")
-sure_to_quit_image = load("images\\sure_to_exit.png")
 background_paper = [cover_image, floor_1_image, floor_2_image, floor_3_image, floor_4_image]
+
 
 # Title and Icon
 set_caption("CRC") # pygame.display.set_caption()
@@ -69,6 +74,7 @@ player_right1 = load("images\\player_right1.png")
 player_right2 = load("images\\player_right2.png")
 tp_point_image1 = load("images\\tp1.png")
 tp_point_image2 = load("images\\tp2.png")
+key_f = load("images\\key_f.png")
 
 player_front = scale(player_front, (70 * display_ratio, 98 * display_ratio)) # 450 * 11/38 * display_ratio
 player_left0 = scale(player_left0, (65 * display_ratio, 98 * display_ratio))
@@ -77,46 +83,51 @@ player_left2 = scale(player_left2, (65 * display_ratio, 98 * display_ratio))
 player_right0 = scale(player_right0, (65 * display_ratio, 98 * display_ratio))
 player_right1 = scale(player_right1, (65 * display_ratio, 98 * display_ratio))
 player_right2 = scale(player_right2, (65 * display_ratio, 98 * display_ratio))
-tp_point_image1 = scale(tp_point_image1, (133 * display_ratio, 133 * display_ratio))
-tp_point_image2 = scale(tp_point_image2, (133 * display_ratio, 133 * display_ratio))
+tp_point_image1 = scale(tp_point_image1, (100 * display_ratio, 100 * display_ratio))
+tp_point_image2 = scale(tp_point_image2, (100 * display_ratio, 100 * display_ratio))
+key_f = scale(key_f, (30 * display_ratio, 30 * display_ratio))
 
 foxyy_8bit = load("images\\Foxxy_8bit.png")
 bamboo_8bit = load("images\\Bamboo_8bit.png")
 bright_8bit = load("images\\Bright_8bit.png")
+dianGod_8bit = load("images\\DianGod_8bit.png")
+fire_8bit = load("images\\Fire_8bit.png")
 
 foxyy_8bit = scale(foxyy_8bit, (80 * display_ratio, 98 * display_ratio))
 bamboo_8bit = scale(bamboo_8bit, (80 * display_ratio, 98 * display_ratio))
 bright_8bit = scale(bright_8bit, (80 * display_ratio, 98 * display_ratio))
+dianGod_8bit = scale(dianGod_8bit, (80 * display_ratio, 98 * display_ratio))
+fire_8bit = scale(fire_8bit, (80 * display_ratio, 98 * display_ratio))
 
 player_images = [[player_front], [player_left0, player_left1, player_left2], [player_right0, player_right1, player_right2]]
-npc_images = [foxyy_8bit, None, bright_8bit, bamboo_8bit, foxyy_8bit] # index 4 is waiting to be changed
+npc_images = [foxyy_8bit, foxyy_8bit, bright_8bit, bamboo_8bit, dianGod_8bit, fire_8bit] # index 4 is waiting to be changed
 
 
 # Mayonaise Game #54 ~ #279
 mode = "normal" # "normal" or "hard"
 drop_before_arrive = 0.8
-pixel_per_second = 565 / drop_before_arrive
+pixel_per_second = 300 * display_ratio / drop_before_arrive
 
 mayo = load("images\mayo.webp") # pygame.image.load()
 mayo.convert()
 start_menu = load("images\patrick_mayo.jpg")
 start_menu.convert()
-start_menu = scale(start_menu, (800, 600)) # pygame.transform.scale
+start_menu = scale(start_menu, (640 * display_ratio, 360 * display_ratio)) # pygame.transform.scale
 start_button = load("images\start_button.png")
 start_button.convert()
-start_button = scale(start_button, (200, 100))
+start_button = scale(start_button, (335, 140))
 mayo = rotate(mayo, 90) # pygame.transform.rotate
 mayo = scale(mayo, (100, 100))
 
 slot = (125, 30)
 rect = Rect(200, 0, 10, 600) # pygame.Rect()
-white_back = Rect(0, 0, 800, 600)
-border_left_line = Rect(140, 0, 10, 600)
-border_right_line = Rect(650, 0, 10, 600)
-display_pressed1 = Rect(150, 500, slot[0], slot[1])
-display_pressed2 = Rect(275, 500, slot[0], slot[1])
-display_pressed3 = Rect(400, 500, slot[0], slot[1])
-display_pressed4 = Rect(525, 500, slot[0], slot[1])
+white_back = Rect(0, 0, 640 * display_ratio, 360 * display_ratio)
+border_left_line = Rect(230 * display_ratio, 0, 10, 360 * display_ratio)
+border_right_line = Rect(230 * display_ratio + 510, 0, 10, 360 * display_ratio)
+display_pressed1 = Rect(183 * display_ratio + 150, 300 * display_ratio, slot[0], slot[1])
+display_pressed2 = Rect(183 * display_ratio + 275, 300 * display_ratio, slot[0], slot[1])
+display_pressed3 = Rect(183 * display_ratio + 400, 300 * display_ratio, slot[0], slot[1])
+display_pressed4 = Rect(183 * display_ratio + 525, 300 * display_ratio, slot[0], slot[1])
 music_mp3 = "images\\ver.hard.mp3"
 track = music.load(music_mp3) # pygame.mixer.music.load()
 
@@ -142,36 +153,34 @@ for i in times_arrive:
     i = round(i, 4)
     times_drop.append(i)
 
-locations = [160, 285, 410, 535]
+locations = [183 * display_ratio + 160, 183 * display_ratio + 285, 183 * display_ratio + 410, 183 * display_ratio + 535]
 def check_dy(now_time, drop_time, cord_y):
     p = now_time - drop_time
     return pixel_per_second * p - (cord_y+60)
 
 def check_remove(time_pass, showing_array_i, prev_key, block):
     block_check = showing_array_i[4] == block
-    cord_y_check = showing_array_i[2] <= 800 and showing_array_i[2] >= 400 # 500, 430
     prev_check = prev_key == 0
-
     time_check = abs(time_pass - showing_array_i[3]) <= 0.1
-
     return block_check and time_check and prev_check
 
 def draw_back():
     draw_rect(screen, (107, 186, 241), white_back) # pygame.draw.rect()
     draw_rect(screen, (255, 255, 0), border_left_line)
     draw_rect(screen, (255, 255, 0), border_right_line)
+    # pygame.draw.line
+    line(screen, (255, 255, 255), (183 * display_ratio + 275, 0),(183 * display_ratio + 275, 360 * display_ratio))
+    line(screen, (255, 255, 255), (183 * display_ratio + 400, 0),(183 * display_ratio + 400, 360 * display_ratio))
+    line(screen, (255, 255, 255), (183 * display_ratio + 525, 0),(183 * display_ratio + 525, 360 * display_ratio))
     
-    line(screen, (255, 255, 255), (275, 0),(275, 600)) # pygame.draw.line()
-    line(screen, (255, 255, 255), (400, 0),(400, 600))
-    line(screen, (255, 255, 255), (525, 0),(525, 600))
-    
-    line(screen, (100, 100, 100), (150, 500),(650, 500))
-    line(screen, (100, 100, 100), (150, 530),(650, 530))
+    line(screen, (100, 100, 100), (183 * display_ratio + 150, 300 * display_ratio),(183 * display_ratio + 650, 300 * display_ratio))
+    line(screen, (100, 100, 100), (183 * display_ratio + 150, 300 * display_ratio + 30),(183 * display_ratio + 650, 300 * display_ratio + 30))
+
 
 def mayo_main():
     global screen
     init() # pygame.init()
-    screen = set_mode((800, 600)) # pygame.display.set_mode
+    screen = set_mode((640 * display_ratio, 360 * display_ratio)) # pygame.display.set_mode
     running = True
     back = 0
     mouse = ""
@@ -180,12 +189,10 @@ def mayo_main():
     started = False
     ended = False
     showing_array = []
-    tapping_array = []
     prev_key = [0, 0, 0, 0] # d f j k
     time_pass = 0
     combo = 0
     note_now = 0
-    end_cnt = 0
     while running:
         mouse_pos = get_pos() # pygame.mouse.get_pos()
         now_time = time()
@@ -198,9 +205,10 @@ def mayo_main():
             draw_back()
         else:
             screen.blit(start_menu, (0, 0))
-            screen.blit(start_button, (370, 70))
+            screen.blit(start_button, (335 * display_ratio, 70 * display_ratio))
             if mouse == "down":
-                if mouse_pos[0] > 300 and mouse_pos[0] < 500 and mouse_pos[1] > 100 and mouse_pos[1] < 400:
+                if mouse_pos[0] > 335 * display_ratio and mouse_pos[0] < 335 * display_ratio + 335\
+                    and mouse_pos[1] > 70 * display_ratio and mouse_pos[1] < 70 * display_ratio + 140:
                     back = 1
                     music.set_volume(0.1) # pygame.mixer.music.set_volume()
                     music.play() # pygame.mixer.music.play()
@@ -220,23 +228,22 @@ def mayo_main():
         # pressed key displaying
         keys = get_pressed() # pygame.key.get_pressed()
         for i in range(len(showing_array)):
-            In = True
-            if i <= len(showing_array) - 1 and check_remove(time_pass, showing_array[i], prev_key[showing_array[i][4]], 0) \
+            if i <= len(showing_array) - 1 and check_remove(time_pass-0.1, showing_array[i], prev_key[showing_array[i][4]], 0) \
                 and keys[K_d]: # pygame.K_d
                 showing_array[i][1] = 2000
                 showing_array[i][2] = 2000
                 showing_array[i][5] = 1
-            if i <= len(showing_array) - 1 and check_remove(time_pass, showing_array[i], prev_key[showing_array[i][4]], 1) \
+            if i <= len(showing_array) - 1 and check_remove(time_pass-0.1, showing_array[i], prev_key[showing_array[i][4]], 1) \
                 and keys[K_f]: # pygame.K_f
                 showing_array[i][1] = 2000
                 showing_array[i][2] = 2000
                 showing_array[i][5] = 1
-            if i <= len(showing_array) - 1 and check_remove(time_pass, showing_array[i], prev_key[showing_array[i][4]], 2) \
+            if i <= len(showing_array) - 1 and check_remove(time_pass-0.1, showing_array[i], prev_key[showing_array[i][4]], 2) \
                 and keys[K_j]: # pygame.K_j
                 showing_array[i][1] = 2000
                 showing_array[i][2] = 2000
                 showing_array[i][5] = 1
-            if i <= len(showing_array) - 1 and check_remove(time_pass, showing_array[i], prev_key[showing_array[i][4]], 3) \
+            if i <= len(showing_array) - 1 and check_remove(time_pass-0.1, showing_array[i], prev_key[showing_array[i][4]], 3) \
                 and keys[K_k]: # pygame.K_k
                 showing_array[i][1] = 2000
                 showing_array[i][2] = 2000
@@ -270,16 +277,16 @@ def mayo_main():
         for i in range(showing_pointer, len(showing_array)):
             if i == len(showing_array):
                 break
-            elif showing_array[i][2] > 600 or showing_array[i][1] > 800:
+            elif showing_array[i][2] > 360 * display_ratio or showing_array[i][1] > 1900:
                 continue
             else:
                 dy = check_dy(time_pass, showing_array[i][0], showing_array[i][2])
                 showing_array[i][2] += dy
-                if showing_array[i][1] > 800:
+                if showing_array[i][1] > 1900:
                     showing_pointer += 1
-                elif showing_array[i][2] > 600:
+                elif showing_array[i][2] > 360 * display_ratio:
                     showing_pointer += 1
-                elif showing_array[i][1] < 800:
+                elif showing_array[i][1] < 1900:
                     screen.blit(mayo, (showing_array[i][1], showing_array[i][2]))
 
         
@@ -307,7 +314,7 @@ def mayo_main():
     return
 
 
-# GOD CLASS # 290 ~ # 684
+# GOD CLASS # 290 ~ # 774
 class Plot :
     def plot_1(self):
         plot_1_0 = load("images\\plot\\plot_1_0.png")
@@ -368,14 +375,17 @@ class Dialogue :
             dia_1_0 = scale(dia_1_0, (1280, 720))
             dia_1_1 = scale(dia_1_1, (1280, 720))
             dia_1_2 = scale(dia_1_2, (1280, 720))
+        screen.fill((0, 0, 0))
         # screen.blit(diangod_image, (0,0)) # 電神輕視表情
         screen.blit(dia_1_0, (0,0)) # 電神：「又有挑戰者了嗎？」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(player_image, (0,0)) # 玩家皺眉表情
         screen.blit(dia_1_1, (0,0)) # （你皺了皺眉，聽不太懂他的意思）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(diangod_image, (0,0)) # 電神得意表情
         screen.blit(dia_1_2, (0,0)) # 電神：「沒關係，準備被電爆吧。」
         update()
@@ -390,19 +400,25 @@ class Dialogue :
             dia_2_1 = scale(dia_2_1, (1280, 720))
             dia_2_2 = scale(dia_2_2, (1280, 720))
             dia_2_3 = scale(dia_2_3, (1280, 720))
+        screen.fill((0, 0, 0))
         # screen.blit(bright_image, (0,0))
         screen.blit(dia_2_0, (0,0)) # Bright：「你剛剛和他戰鬥了吧！」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(player_image, (0,0))
         screen.blit(dia_2_1, (0,0)) # 你：「他？指在四樓的那個閃電人嗎？」or 「對啊，他究竟是誰啊？」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(bright_image, (0,0))
+        screen.fill((0, 0, 0))
         screen.blit(dia_2_2, (0,0)) # Bright:「呵呵，他是《電神》是我們組織的統治者」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(player_image, (0,0))
+        screen.fill((0, 0, 0))
         screen.blit(dia_2_3, (0,0)) # 你：「組織？什麼組織」
         update()
         check_mouse()
@@ -422,26 +438,32 @@ class Dialogue :
             dia_3_4 = scale(dia_3_4, (1280, 720))
             dia_3_5 = scale(dia_3_5, (1280, 720))
             # dia_3_6 = scale(dia_3_6, (1280, 720))
+        screen.fill((0, 0, 0))
         # screen.blit(foxyy_image, (0,0)) # foxyy 開心表情
         screen.blit(dia_3_0, (0,0)) # foxyy：「我們是CRC！」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(playerbright_image, (0,0)) # player 和 bright 若有所思
         screen.blit(dia_3_1, (0,0)) # (看著突然出現的女子，你跟Bright都若有所思）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(player_image, (0,0)) # player 驚嚇表情
         screen.blit(dia_3_2, (0,0)) # 你：（怎麼突然有人冒出來）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(bright_image, (0,0)) # bright 驚嚇表情
         screen.blit(dia_3_3, (0,0)) # Bright：（他…怎麼會出現在這裡）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(foxyy_image, (0,0)) # foxyy 開心表情
         screen.blit(dia_3_4, (0,0)) # foxyy：「CRC，又稱為電算社，我們擁有能改變世界的電算之力！」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         screen.blit(dia_3_5, (0,0)) # foxyy：「簡單來說，就是程式設計。如果精通這項能力，就會擁有很強大的力量，例如發射閃電之類的喔！」
         update()
         check_mouse()
@@ -457,14 +479,17 @@ class Dialogue :
             dia_4_0 = scale(dia_4_0, (1280, 720))
             dia_4_1 = scale(dia_4_1, (1280, 720))
             dia_4_2 = scale(dia_4_2, (1280, 720))
+        screen.fill((0, 0, 0))
         # screen.blit(bright_image, (0,0)) # bright 得意表情
         screen.blit(dia_4_0, (0,0)) # Bright：「我可是教導程式的高手呢！只要十分鐘，我便能把所有的基礎都教會你！」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(foxyy_image, (0,0)) # foxyy 可愛表情
         screen.blit(dia_4_1, (0,0)) # foxyy：「人家也來幫你吧！」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(player_image, (0,0)) # player 安心表情
         screen.blit(dia_4_2, (0,0)) # （看來這裡還是有很多善良的人呢，你放心了許多）
         update()
@@ -477,14 +502,17 @@ class Dialogue :
             dia_5_0 = scale(dia_5_0, (1280, 720))
             dia_5_1 = scale(dia_5_1, (1280, 720))
             dia_5_2 = scale(dia_5_2, (1280, 720))
+        screen.fill((0, 0, 0))
         # screen.blit(player_image, (0,0)) # player 電流
         screen.blit(dia_5_0, (0,0)) # （在Bright和foxyy的教導之下，你很快就學會基礎的程式設計，並感覺到有股電流在你的身體裡流竄）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(bright_image, (0,0)) # bright 開心表情
         screen.blit(dia_5_1, (0,0)) # Bright：「學的這麼快，看來你擁有很強的潛力呢。不過，我能教的都教完了，如果你想學更多，就到三樓去找更多高手請教吧，但是要注意，有些人並不歡迎外人打擾。」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(foxyy_image, (0,0)) # foxyy 驚嚇表情
         screen.blit(dia_5_2, (0,0)) # foxyy：「放心，人家會陪著你上去~」
         update()
@@ -517,53 +545,66 @@ class Dialogue :
             dia_6_10 = scale(dia_6_10, (1280, 720))
             dia_6_11 = scale(dia_6_11, (1280, 720))
             dia_6_12 = scale(dia_6_12, (1280, 720))
+        screen.fill((0, 0, 0))
         # screen.blit(playerfoxyy_image, (0,0)) # player 和 foxyy 牽手
         screen.blit(dia_6_0, (0,0)) # （你和foxyy來到了三樓）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(foxyy_image, (0,0)) # foxyy 開心表情
         screen.blit(dia_6_1, (0,0)) # foxyy：「我們去右邊的教室吧！」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(bamboo_image, (0,0)) # bamboo 殺氣背影配刀
         screen.blit(dia_6_2, (0,0)) # (一進去教室，你看到有名女子正坐在講桌電腦旁擦著手上的刀)
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(foxyy_image, (0,0)) # foxyy 普通表情
         screen.blit(dia_6_3, (0,0)) # foxyy:是學術組的Bamboo，看來真的遇到高手了
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(bamboo_image, (0,0)) # bamboo 殺氣臉
         screen.blit(dia_6_4, (0,0)) # (Bamboo望了你們一眼）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         screen.blit(dia_6_5, (0,0)) # Bamboo:「怎麼會有外人前來拜訪」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(player_image, (0,0)) # player 普通表情
         screen.blit(dia_6_6, (0,0)) # 你：「早安，為了雪恥，請教我更進階的程式以面對電神，請885」or「ㄜ...我來學精深的程式，助我打敗電神」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(bamboo_image, (0,0)) # bamboo 殺氣表情
         screen.blit(dia_6_7, (0,0)) # Bamboo:「聽你一說，你想請託我協助你們挑戰電神？所以你們其實是入侵者吧」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(foxyybamboo_image, (0,0)) # foxyy 冒汗表情 bamboo 握刀
         screen.blit(dia_6_8, (0,0)) # （foxyy正想解釋，但Bamboo已經拔刀奔來）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(bamboo_image, (0,0)) # bamboo 殺氣表情
         screen.blit(dia_6_9, (0,0)) # Bamboo:「沒想到你們竟能從電神手中逃過一劫，不過在下是不會放過任何入侵者的」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(foxyy_image, (0,0)) # foxyy 冒汗表情
         screen.blit(dia_6_10, (0,0)) # foxyy:「（指著門）快點離開，危險！」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(bamboo_image, (0,0)) # bamboo 殺氣表情
         screen.blit(dia_6_11, (0,0)) # Bamboo:「別想逃，”竹林叢生”」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(manybamboo_image, (0,0)) # 一堆竹子
         screen.blit(dia_6_12, (0,0)) # （門口前瞬間長出一堆竹子，賭住了唯一的出口，看來只能戰鬥了）
         update()
@@ -594,47 +635,59 @@ class Dialogue :
             dia_7_9 = scale(dia_7_9, (1280, 720))
             dia_7_10 = scale(dia_7_10, (1280, 720))
             dia_7_11 = scale(dia_7_11, (1280, 720))
+        screen.fill((0, 0, 0))
         # screen.blit(playerbamboo_image, (0,0)) # player 累 bamboo 憤怒表情
         screen.blit(dia_7_0, (0,0)) # （你不斷閃過Bamboo的斬擊，Bamboo開始感到心急）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(bamboo_image, (0,0)) # bamboo 憤怒表情
         screen.blit(dia_7_1, (0,0)) # Bamboo:可惡，區區入侵者在下居然不能解決
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         screen.blit(dia_7_2, (0,0)) # Bamboo:《程式枷鎖》
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(playerRRR_image, (0,0)) # player + 枷鎖
         screen.blit(dia_7_3, (0,0)) # （突然有一條寫滿程式的繩子將你綁住，使你無法動彈）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(player_image, (0,0)) # player 問號表情
         screen.blit(dia_7_4, (0,0)) # 你：「這是什麼東西」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(foxyy_image, (0,0)) # foxyy 嚴肅表情
         screen.blit(dia_7_5, (0,0)) # foxyy:「程式枷鎖⋯⋯，除非你找出這程式的bug，否則這不會解開」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(bamboo_image, (0,0)) # bamboo 殺氣表情
         screen.blit(dia_7_6, (0,0)) # Bamboo：「這樣就結束了，接招吧《竹切斬》」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         screen.blit(dia_7_7, (0,0)) # （強力的斬擊落下，劍氣所及之處煙霧四散）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         screen.blit(dia_7_8, (0,0)) # （待煙霧散去，Bam發現你們兩個都沒事）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(foxyy_image, (0,0)) # foxyy 自豪表情
         screen.blit(dia_7_9, (0,0)) # foxyy:「這種程式，找出bug有什麼難的」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(bamboo_image, (0,0)) # bamboo 驚訝表情
         screen.blit(dia_7_10, (0,0)) # （Bamboo驚訝的看著foxyy，過了幾秒後發現原來foxyy其實是自己人）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         screen.blit(dia_7_11, (0,0)) # Bamboo:原來是foxyy，這代表你不是入侵者吧
         update()
         check_mouse()
@@ -644,10 +697,12 @@ class Dialogue :
         if display_ratio == 2:
             dia_8_0 = scale(dia_8_0, (1280, 720))
             dia_8_1 = scale(dia_8_1, (1280, 720))
+        screen.fill((0, 0, 0))
         # screen.blit(fire_image, (0,0)) # fire 輕視表情
         screen.blit(dia_8_0, (0,0)) # Fire:「你怎麼又上來了，還想再被電爆嗎？」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         screen.blit(dia_8_1, (0,0)) # Fire:「以你這種程度，根本不用電神出馬，我一個人就能解決你了」
         update()
         check_mouse()
@@ -655,6 +710,7 @@ class Dialogue :
         dia_9_0 = load("images\\dia\\dia_9\\dia_9_0.png")
         if display_ratio == 2:
             dia_9_0 = scale(dia_9_0, (1280, 720))
+        screen.fill((0, 0, 0))
         # screen.blit(fire_image, (0,0)) # fire 驚訝表情
         screen.blit(dia_9_0, (0,0)) # Fire:「沒想到你竟然能答出這些問題⋯，是我太大意了⋯⋯」
         update()
@@ -671,20 +727,25 @@ class Dialogue :
             dia_10_2 = scale(dia_10_2, (1280, 720))
             dia_10_3 = scale(dia_10_3, (1280, 720))
             dia_10_4 = scale(dia_10_4, (1280, 720))
+        screen.fill((0, 0, 0))
         screen.blit(dia_10_0, (0,0)) # （之後你走進教室，看見教室裡面只有foxyy一個人）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         screen.blit(dia_10_1, (0,0)) # 你：「電神不在這裡嗎？」or「foxyy，電神在哪裡？」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(foxyy_image, (0,0)) # foxyy 普通表情
         screen.blit(dia_10_2, (0,0)) # foxyy:「電神？他現在正在這間教室裡啊」
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(foxyy_image, (0,0)) # foxyy 女裝
         screen.blit(dia_10_3, (0,0)) # 你不了解她說的意思，直到看見她手中的閃電，你才終於發現了異常。foxyy脱去女裝，周圍爆發出閃電
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         screen.blit(dia_10_4, (0,0)) # foxyy:「好了，你的實力已經增強不少了，真是另人期待，開始最後的戰鬥吧！」
         update()
         check_mouse()
@@ -698,17 +759,21 @@ class Dialogue :
             dia_11_1 = scale(dia_11_1, (1280, 720))
             dia_11_2 = scale(dia_11_2, (1280, 720))
             dia_11_3 = scale(dia_11_3, (1280, 720))
+        screen.fill((0, 0, 0))
         # screen.blit(foxyy_image, (0,0)) # foxyy 倒地
         screen.blit(dia_11_0, (0,0)) # （你歷經了千辛萬苦，終於在最後一刻找到機會電爆foxyy，foxyy倒地不起）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         screen.blit(dia_11_1, (0,0)) # foxyy:我⋯竟然輸了
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         # screen.blit(foxyy_image, (0,0)) # foxyy 欣慰表情
         screen.blit(dia_11_2, (0,0)) # （foxyy臉上並未出現任何不甘和憤怒，反而欣慰的笑了）
         update()
         check_mouse()
+        screen.fill((0, 0, 0))
         screen.blit(dia_11_3, (0,0)) # foxyy:「我就知道你有這個潛力，當初放你一馬並教導你，就是為了激發深藏在你體內的電算之力，CRC之後就交給你了」
         update()
         check_mouse()
@@ -725,90 +790,104 @@ def initialize():
     global time_frame
     global control
     global ex_control
-    global print_flag
     global background
     global started
     global mouse
     global floor_passed
     global floor4_entered
+    global next_floor
     scene_x = -5
     player_x = 320 * display_ratio - 70
     time_frame = 0
     control = 0
     ex_control = control
-    print_flag = 0
     background = background_paper[0]
     started = 0
     mouse = ""
     floor_passed = 1
     floor4_entered = False
+    next_floor = 4
     system("cls")
 
 
 def control_flow(cur_control, started):
     global floor_passed
     global floor4_entered
+    global next_floor
+    bias = check_tp_f(cur_control, player_x, floor_passed)
+    control_loc = cur_control + bias
+    if bias != 0:
+        print(f"bias = {bias}, control_loc = {control_loc}, next_floor = {next_floor}")
+        cutscene(0)
+        if control_loc == next_floor:
+            if not floor4_entered and next_floor == 4:
+                cutscene("jump")
+                plot.plot_1()
+                floor_passed = 0
+                return 4
+            floor_passed = 0
+            cutscene("jump")
+            return control_loc
+        else:
+            cutscene("jump")
+            return control_loc
     if cur_control == -1:
         return -1
     elif started == 0 and mouse == "down":
         return 1
     elif not started:
         return 0
-    elif cur_control == 1 and check_tp(player_x, floor_passed):
-        cutscene("jump")
-        plot.plot_1()
-        floor_passed = 0
-        return 4
-    elif cur_control == 4 and check_npc_event(control, scene_x, floor_passed) and not floor4_entered:
-        dialogue.dia_1()
-        # battle 1
-        floor4_entered = True
-        floor_passed = 1
-        cutscene(0)
-        plot.plot_2()
-        cutscene(0)
-        floor_passed = 0
-        return 2
-    elif cur_control == 2 and check_npc_event(control, scene_x, floor_passed):
-        cutscene(0)
-        dialogue.dia_2()
-        dialogue.dia_3()
-        dialogue.dia_4()
-        # battle 2
-        dialogue.dia_5()
-        floor_passed = 1
-        cutscene(0)
-        return 2
-    elif cur_control == 2 and check_tp(player_x, floor_passed):
-        floor_passed = 0
-        cutscene("jump")
-        return 3
-    elif cur_control == 3 and check_npc_event(control, scene_x, floor_passed):
-        cutscene(0)
-        dialogue.dia_6()
-        mayo_main() # battle 3
-        dialogue.dia_7()
-        plot.plot_3()
-        cutscene(0)
-        floor_passed = 1
-        return 3
-    elif cur_control == 3 and check_tp(player_x, floor_passed):
-        floor_passed = 0
-        cutscene("jump")
-        return 4
-    elif cur_control == 4 and check_npc_event(control, scene_x, floor_passed) and floor4_entered:
-        dialogue.dia_8()
-        # battle 4
-        dialogue.dia_9()
-        dialogue.dia_10()
-        # battle 5
-        dialogue.dia_11()
-        plot.plot_5()
-        floor_passed = 1
-        print("遊戲結束:D, 謝謝你的參與:D")
-        return 1
+    elif control_loc == next_floor:
+        if next_floor == 4:
+            if not floor4_entered and check_npc_event(control_loc, scene_x, floor_passed):
+                dialogue.dia_1()
+                # battle 1
+                floor4_entered = True
+                floor_passed = 1
+                cutscene(0)
+                plot.plot_2()
+                cutscene(0)
+                floor_passed = 0
+                next_floor = 2
+                return 2
+            elif floor4_entered and check_npc_event(control_loc, scene_x, floor_passed):
+                dialogue.dia_8()
+                # battle 4
+                dialogue.dia_9()
+                dialogue.dia_10()
+                # battle 5
+                dialogue.dia_11()
+                plot.plot_5()
+                floor_passed = 1
+                print("遊戲結束:D, 謝謝你的參與:D")
+                return 1
+            else:
+                return control_loc
+        elif next_floor == 2 and check_npc_event(control_loc, scene_x, floor_passed):
+            cutscene(0)
+            dialogue.dia_2()
+            dialogue.dia_3()
+            dialogue.dia_4()
+            # battle 2
+            dialogue.dia_5()
+            floor_passed = 1
+            next_floor = 3
+            cutscene(0)
+            return 2
+        elif next_floor == 3 and check_npc_event(control_loc, scene_x, floor_passed):
+            cutscene(0)
+            dialogue.dia_6()
+            mayo_main() # battle 3
+            dialogue.dia_7()
+            plot.plot_3()
+            cutscene(0)
+            floor_passed = 1
+            next_floor = 4
+            return 3
+        else:
+            return control_loc
     else:
-        return cur_control
+        return control_loc
 
 
 def check_mouse():
@@ -838,21 +917,53 @@ def check_quit(mouse_pos): # 0 for running, 1 for breaking
 
 
 def check_tp(player_x, floor_passed):
-    global control
     if floor_passed:
-        if player_x <= 260 or player_x >= 515 * display_ratio:
-            return True
+        if player_x <= 260:
+            return -1
+        if player_x >= 490 * display_ratio:
+            return 1
         else:
-            return False
+            return 0
     else:
-        return False
+        return 0
+
+
+def check_tp_f(control, player_x, floor_passed):
+    if control <= 0:
+        return 0
+    elif check_tp(player_x, floor_passed) == -1:
+        if control == 1:
+            return 0
+        screen.blit(key_f, (110 + scene_x, 140 * display_ratio))
+        screen.blit(arrow_down, (130 + scene_x, 135 * display_ratio))
+            
+        if keys[K_f]:
+            return -1
+        else:
+            return 0
+    elif check_tp(player_x, floor_passed) == 1:
+        if control == 4:
+            return 0
+        screen.blit(key_f, (1060 * display_ratio + scene_x, 140 * display_ratio))
+        screen.blit(arrow_up, (1080 * display_ratio + scene_x, 135 * display_ratio))
+        if keys[K_f]:
+            return 1
+        else:
+            return 0
+    else:
+        return 0
 
 
 def check_npc_event(control, scene_x, floor_passed):
     if control <= 1 or floor_passed:
         return False
-    elif scene_x <= -230 * display_ratio:
-        return True
+    elif scene_x <= -230 * display_ratio and scene_x >= -300 * display_ratio:
+        screen.blit(key_f, (575 * display_ratio + scene_x, 155 * display_ratio))
+        update()
+        if keys[K_f]:
+            return True
+        else:
+            return False
     else:
         return False
 
@@ -891,6 +1002,9 @@ def background_display(control, scene, scene_x):
         screen.blit(scene, (0, 0))
     else:
         screen.blit(scene, (scene_x, 0))
+        # if control != 0:
+            # screen.blit(arrow_down, (30 * display_ratio + scene_x, 270 * display_ratio))
+            # screen.blit(arrow_up, (1050 * display_ratio + scene_x, 270 * display_ratio))
     screen.blit(quit_icon, (570 * display_ratio, 10 * display_ratio))
 
 
@@ -912,10 +1026,13 @@ def player_display(control, player_x, time_frame):
         screen.blit(player, (player_x, 180 * display_ratio))
 
 
-def npc_display(control, scene_x, floor_passed):
-    if control <= 1 or floor_passed:
+def npc_display(control, scene_x, floor_passed, next_floor):
+    if control <= 1 or floor_passed or control != next_floor:
         return
-    screen.blit(npc_images[control], (550 * display_ratio + scene_x, 180 * display_ratio))
+    elif control == 4 and floor4_entered:
+        screen.blit(npc_images[5], (550 * display_ratio + scene_x, 180 * display_ratio))
+    else:
+        screen.blit(npc_images[control], (550 * display_ratio + scene_x, 180 * display_ratio))
     
 
 
@@ -923,18 +1040,23 @@ def tp_display(control, scene_x, time_frame, floor_passed):
     if control < 1 or not floor_passed:
         return
     if time_frame < 10:
-        screen.blit(tp_point_image1, (90 + scene_x, 143 * display_ratio))
-        screen.blit(tp_point_image1, (1000 * display_ratio + scene_x, 143 * display_ratio))
+        if control != 1:
+            screen.blit(tp_point_image1, (60 + scene_x, 170 * display_ratio))
+        if control != 4:
+            screen.blit(tp_point_image1, (1040 * display_ratio + scene_x, 170 * display_ratio))
     else:
-        screen.blit(tp_point_image2, (90 + scene_x,  143 * display_ratio))
-        screen.blit(tp_point_image2, (1000 * display_ratio + scene_x, 143 * display_ratio))
+        if control != 1:
+            screen.blit(tp_point_image2, (60 + scene_x,  170 * display_ratio))
+        if control != 4:
+            screen.blit(tp_point_image2, (1040 * display_ratio + scene_x, 170 * display_ratio))
 
-def cutscene(mode):
+
+def cutscene(mode=0):
     global player_x
     global scene_x
     screen.fill((0, 0, 0))
     update()
-    sleep(1)
+    sleep(0.5)
     if mode == "jump":
         player_x = 320 * display_ratio - 70
     scene_x = -5
@@ -944,6 +1066,8 @@ def scroll_walk():
     global scene_x
     global player_x
     border_r = 520 * display_ratio
+    if control <= 0:
+        return
     if keys[K_d]: # pygame.K_d
         if player_x + speed <= 320 * display_ratio - 70:
             player_x += speed
@@ -984,7 +1108,6 @@ while running:
     scroll_walk()
     pygame_event_response(mouse_pos)
     time_frame = (time_frame + 1) % 20
-    control = control_flow(control, started)
     if control != -1:
         ex_control = control
     if control == -1:
@@ -992,7 +1115,8 @@ while running:
     started = control
     # background fill
     background_display(control, background_paper[control], scene_x)
-    player_display(control, player_x, time_frame)
     tp_display(control, scene_x, time_frame, floor_passed)
-    npc_display(control, scene_x, floor_passed)
+    npc_display(control, scene_x, floor_passed, next_floor)
+    player_display(control, player_x, time_frame)
+    control = control_flow(control, started)
     update() # pygame.display.update()
