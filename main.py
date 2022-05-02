@@ -1035,7 +1035,6 @@ def npc_display(control, scene_x, floor_passed, next_floor):
         screen.blit(npc_images[control], (550 * display_ratio + scene_x, 180 * display_ratio))
     
 
-
 def tp_display(control, scene_x, time_frame, floor_passed):
     if control < 1 or not floor_passed:
         return
@@ -1100,6 +1099,7 @@ def pygame_event_response(mouse_pos):
 
 # Game Loop
 background = background_paper[0]
+initialize()
 print("點下滑鼠，開始遊戲吧:D")
 while running:
     # Basic Info
