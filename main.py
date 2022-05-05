@@ -9,7 +9,6 @@ from pygame.mouse import get_pos
 from pygame.key import get_pressed
 from pygame.event import get
 from time import time, sleep
-from subprocess import run as subrun
 from os import system
 from time import time, sleep
 
