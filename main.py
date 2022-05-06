@@ -22,6 +22,7 @@ running = True
 mouse = ""
 scene_x = -5
 player_x = 320 * display_ratio - 70
+foxxy_x = player_x - 50 * display_ratio
 time_frame = 0
 control = 0
 ex_control = control
@@ -948,6 +949,7 @@ dialogue = Dialogue()
 def initialize():
     global scene_x
     global player_x
+    global foxxy_x
     global time_frame
     global control
     global ex_control
@@ -959,6 +961,7 @@ def initialize():
     global next_floor
     scene_x = -5
     player_x = 320 * display_ratio - 70
+    foxxy_x = player_x - 50 * display_ratio
     time_frame = 0
     control = 0
     ex_control = control
@@ -1230,6 +1233,7 @@ def story_backgroud():
 def scroll_walk():
     global scene_x
     global player_x
+    global foxxy_x
     border_r = 520 * display_ratio
     if control <= 0:
         return
