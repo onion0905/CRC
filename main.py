@@ -10,7 +10,9 @@ from pygame.key import get_pressed
 from pygame.event import get
 from time import time, sleep
 from os import system
-from time import time, sleep
+from subprocess import run as subrun
+import tkinter as tk
+import tkinter.messagebox as msg
 
 # intialize
 init() # pygame.init()
@@ -941,6 +943,318 @@ class Dialogue :
         check_mouse()
 
 
+def question1():
+    base = tk.Tk()
+    base.title("問題一")
+    t = '''
+    電神看著你狂妄地笑著，心想著又有一個店小二來送菜了。
+    現在他的助手突然帶著重要的訊息前來，他不想讓你聽到內容，但你擋在電神面前，以致於助手無法傳遞訊息。
+    於是，他決定使用「雜湊」來產生一串你聽不懂的數字，再請電神用已經講好的方法來解密。
+    問題是，雜湊並非一個簡單的技巧，而助手因為不夠電而忘了如何雜湊
+    所以他對你提出一個條件：如果你幫他雜湊並把訊息傳遞給電神，則你會知道訊息的所有內容。
+    好奇的你心想，這是什麼簡單的東西，雜湊我幼稚園就會了！
+    現在請你找到兩個好的常數雜湊該訊息，讓電神解密時不會發生碰撞或其他錯誤。
+    1. p = 0, m = 1
+    2. p = 1, m = 0
+    3. p = 1560, m = 1563
+    4. p = 1570, m = 1576
+    5. p = 1559, m = 1581
+    6. p = 1567, m = 1571
+    7. 開玩笑的，幼稚園怎麼可能會這種東西，我開玩笑的啦，放我一馬
+    '''
+    base.geometry("600x330")
+    def false():
+        false_msg = '''
+        電神先是冷笑一聲，緊接著是更加狂妄的大笑：
+        「哼哈哈哈哈你答錯囉，準備接受電神的制裁和助手的怒火吧！」
+        '''
+        msg.showerror("完蛋ㄌ", false_msg)
+        base.destroy()
+
+    def correct():
+        correct_msg = '''
+        助手用欽慕的眼神望著你，開始對著你瘋狂地膜拜，
+        但此舉卻惹怒了在一旁的電神。電神怒吼：
+        「你這個沒用的東西，上禮拜社課才剛教完的東西，現在就忘記！？
+        還要請一個外人來幫忙！？我看你是沒救了，快給我從電算社滾出去！」
+        接著發射一道超強的電流，直接一擊斃命，把他的助手電爛了。
+        電神上下打量著你，竟然能解出這種難題，
+        不過後來想一想，你肯定是靠賽嘛，怎麼可能有人會這種困難的知識！
+        電神又露出了他詭異唯妙的笑容......'''
+        msg.showinfo("完蛋ㄌ", correct_msg)
+        base.destroy()
+
+    def main():
+        tk.Label(base, text=t).grid(row = 0)
+        for i in range(7):
+            if i == 5:
+                tk.Button(base, text = str(i+1), command=correct).place(x = 150 + 50*i, y = 270)
+            else:
+                tk.Button(base, text = str(i+1), command=false).place(x = 150 + 50*i, y = 270)
+        base.mainloop()
+
+    main()
+
+
+class Question2_1():
+    def __init__(self):
+        self.base = tk.Tk()
+        self.base.title("問題二")
+        self.text = tk.StringVar()
+        self.base.geometry("800x650")
+        self.proc = 0
+        self.choose = False
+        self.t = '''
+Foxxy 帶著你進入奇幻的程式世界，準備教授你程式語言的基礎。一起來看他精心精簡過的講義吧:D
+我們今天要教的程式語言是 C++！它的基礎語法非常簡單，那我們先來示範如何定義變數：
+'''
+        self.op1text = '''
+int a;
+int b;
+std::cout << a + b << std::endl;
+'''
+
+        self.op2text = '''
+int a = 3;
+int b = a + a;
+cout<< b << endl;
+'''
+
+        self.op3text = '''
+int a = 10 * 100;
+std::cout << a << std::endl;
+'''
+        self.op4text = '''
+int a = 3
+std::cout << a << std::endl
+'''
+        self.text.set(self.t)
+        self.label = tk.Label(self.base, textvariable=self.text)
+        self.button = tk.Button(self.base, text = "下一頁", command=self.changeText)
+        self.button.place(x = 360, y = 20)
+        self.label.place(x = 120, y = 50)
+        self.base.mainloop()
+    def changeText(self):
+        self.proc += 1
+        self.new_script = self.t
+        if self.proc == 1:
+            msg.showinfo("變數", "int a = 0;")
+            self.new_script += '''
+int a = 0;
+這行程式非常的簡單。int 是 integer 的縮寫，代表這個變數是整數型別，而 a 則是它的名字。
+一開始我們給他 0 這個值。記得 C++ 的每行程式碼後面都要加分號喔！
+'''
+        elif self.proc == 2:
+            msg.showinfo("變數", "int b = a + 1")
+            self.new_script += '''
+int b = a + 1
+
+那這行也是一樣，定義一個整數 b，賦予它 a + 1 的值。
+最後我們來輸出他們的值吧！
+'''
+        elif self.proc == 3:
+            msg.showinfo("輸出", "std::cout << a << b << std::endl;")
+            self.new_script += '''
+std::cout << a << b << std::endl;
+這行比較複雜一點。std 是 C++ 最常用的物件、函式和型別的集合
+而標準輸出函式 cout 和換行 endl 則是 std 旗下的東西
+所以前面要加上 std:: ，編譯器才認得這些東西喔！
+輸出變數的方法就是在變數前輸入 << 就可以輸出了。是不是很方便？            
+'''
+        elif self.proc == 4:
+            msg.showinfo("執行結果", "執行結果：01")
+            self.new_script += '''
+執行結果：01
+
+可是這不是我們想要的耶，我想要把兩個變數分開輸出，不要黏在一起！
+那我們稍微修改一下程式碼，加個空白看看：
+'''
+        elif self.proc == 5:
+            msg.showinfo("輸出", "std::cout << a << ' ' << b << std::endl;")
+            self.new_script += '''
+std::cout << a << "\x20" << b << std::endl;
+執行結果：0  1
+
+
+恭喜你成功學習了程式設計的基礎知識！接下來我們來做一些練習：
+Foxyy 看到你昏昏欲睡的表情，決定來給你實際操作一下程式設計。
+請試著用講義中學到的知識幫 foxxy debug 一下吧！請問下列哪一個程式片段沒有錯誤？
+'''
+            self.choose = True
+            tk.Button(self.base, text = self.op1text, command=self.op1).place(x = 50, y = 550)
+            tk.Button(self.base, text = self.op2text, command=self.op2).place(x = 250, y = 550)
+            tk.Button(self.base, text = self.op3text, command=self.op3).place(x = 390, y = 550)
+            tk.Button(self.base, text = self.op4text, command=self.op4).place(x = 570, y = 550)
+
+        self.t = self.new_script
+        self.text.set(self.t)
+
+    def op1(self):
+        msg.showerror("哎呀錯ㄌ", "看清楚，你根本沒有跟電腦說 a 跟 b 分別等於什麼，他沒辦法把他們加在一起啦！再試試看吧！")
+    def op2(self):
+        msg.showerror("哎呀錯ㄌ", "唉呀唉呀，你忘記加 std:: 了啦！記得注意喔！再試試看吧！")
+    def op3(self):
+        msg.showinfo("恭喜答對:D", "恭喜你答對了！Foxxy 很為你高興！")
+        self.base.destroy()
+    def op4(self):
+        msg.showerror("哎呀錯ㄌ", "忘記加分號啦！再試試看吧！")
+
+
+class Question2_2():
+    def __init__(self):
+        self.base = tk.Tk()
+        self.base.title("問題三")
+        self.text = tk.StringVar()
+        self.base.geometry("600x500")
+        self.proc = 0
+        self.choose = False
+        # beware, there are lots of space in the text
+        self.t = '''
+有了變數的基礎，Foxyy 請你實作「拿出一個兩位數的兩個數字、分別輸出」。
+a 為該兩位數，現在請你輸出 a 的十位數和個位數，中間輸出一個空格，行尾輸出空格。
+Foxyy 先幫你寫好了一些 code，如下：
+
+#include <iostream>
+int main() {                   
+	int a;                                    
+	std::cin >> a; // 輸入       
+	...                                         
+	return 0;                             
+}                                   
+
+請問 ... 為下列哪一段程式碼時可以解決這個問題？
+'''
+        self.op1text = '''
+std::cout << a[2] << ' ' << a[1] << std::endl;
+'''
+
+        self.op2text = '''
+std::cout << a << ' ' << a % 10 << std::endl;
+'''
+
+        self.op3text = '''
+std::cout << a / 10 << ' ' << a % 10 << std::endl;
+'''
+        self.op4text = '''
+std::cout << a << std::endl;
+'''
+        self.text.set(self.t)
+        self.label = tk.Label(self.base, textvariable=self.text)
+        self.label.pack()
+        tk.Button(self.base, text = self.op1text, command=self.op1).pack()
+        tk.Button(self.base, text = self.op2text, command=self.op2).pack()
+        tk.Button(self.base, text = self.op3text, command=self.op3).pack()
+        tk.Button(self.base, text = self.op4text, command=self.op4).pack()
+        self.base.mainloop()
+
+    def op1(self):
+        msg.showerror("哎呀錯ㄌ", "a 不是陣列（加入電算社，我們會教你怎麼用陣列的！）\n沒辦法這樣取值喔！")
+    def op2(self):
+        msg.showerror("哎呀錯ㄌ", "一開始輸出 a 就已經超過一個數字了，再想想吧！")
+    def op3(self):
+        msg.showinfo("恭喜答對:D", "恭喜你答對！")
+        self.base.destroy()
+    def op4(self):
+        msg.showerror("哎呀錯ㄌ", "這樣數字中間不會有空格喔！再想想吧！")
+
+
+class Question2_3():
+    def __init__(self):
+        self.base = tk.Tk()
+        self.base.title("問題四")
+        self.text = tk.StringVar()
+        self.base.geometry("600x400")
+        self.proc = 0
+        self.choose = False
+        # beware, there are lots of space in the text
+        self.t = '''
+現在 foxyy 拿出一排重量不一的蘋果排成一列，但他們的大小並不一樣，
+你只知道他們已經把蘋果按照重量由左至右排序過了。
+你剛跟電神戰鬥完，突然感到口乾舌燥，急著想拿一顆蘋果吃掉，
+但 foxyy 想到了一個好玩的遊戲。他請你找到一顆重量剛剛好為 w 的蘋果，當你找到它就可以把它吃掉。
+因為你快渴死了，所以你想要在最快時間內找到 foxyy 指定的蘋果。
+請問下列哪一種搜尋方法找到蘋果的速度會最快？
+'''
+        self.op1text = '''
+從最左邊開始，一個一個往右找，反正一定會找到的嘛
+'''
+
+        self.op2text = '''
+把蘋果按照大小排序，感覺重量對的選下去就對了
+'''
+
+        self.op3text = '''
+從重量中間的開始找，如果比目標重就找左邊的蘋果，比目標輕就找右邊的
+'''
+        self.op4text = '''
+哎呦不管了啦，這什麼白癡問題，雜湊就對了啦，我要電爛 Foxyy owo
+'''
+        self.text.set(self.t)
+        self.label = tk.Label(self.base, textvariable=self.text)
+        self.label.pack()
+        tk.Button(self.base, text = self.op1text, command=self.op1).pack()
+        tk.Button(self.base, text = self.op2text, command=self.op2).pack()
+        tk.Button(self.base, text = self.op3text, command=self.op3).pack()
+        tk.Button(self.base, text = self.op4text, command=self.op4).pack()
+        self.base.mainloop()
+
+    def op1(self):
+        msg.showerror("哎呀錯ㄌ", "你正準備這樣做的時候，Foxyy 趕快跳出來阻止你這麼做\n因為在你找到對的蘋果之前，你會因為找太久就渴死了。\n再看看有沒有更快的搜尋方法吧！")
+    def op2(self):
+        msg.showerror("哎呀錯ㄌ", "Foxxy 都快哭了，他好不容易幫你照重量排序好結果又被你打亂了！\n大小跟重量沒有絕對關係，所以不能用大小來判斷重量啦！\n好在好心的 Foxyy 又幫你把蘋果照重量排序好了，再試另一個答案吧！")
+    def op3(self):
+        msg.showinfo("恭喜答對:D", "好耶你答對了，你吃到了 foxxy 精心幫你挑選最好吃的蘋果！")
+        self.base.destroy()
+    def op4(self):
+        msg.showerror("哎呀錯ㄌ", "Foxxy 苦著臉拜託你好好看完選項再應答\n也千萬不要想著靠他幼稚園就會的東西把他電爛，那是不可能的事的啦！")
+
+
+class Question4():
+    def __init__(self):
+        self.base = tk.Tk()
+        self.base.title("問題五")
+        self.text = tk.StringVar()
+        self.base.geometry("600x400")
+        self.proc = 0
+        self.choose = False
+        # beware, there are lots of space in the text
+        self.t = '''
+經過了電算社員的開導，你的資訊能力（電場？）明顯大幅提升。
+你毫不畏懼地面對 Fire 對你提出的挑戰。
+Fire 拿出一段很毒（指易讀性低）的程式碼，請你告訴他程式的輸出結果。
+熟悉了變數的你決定直接開電，向 Fire 證明你的實力。
+#include <iostream>
+int a = 1;                      
+int main() {                  
+	int a = 2;                            
+    	       std::cout << a << std::endl;
+	return 0;                             
+}                                   
+請問輸出結果為何？
+'''
+        self.op1text = "1"
+        self.op2text = "2"
+        self.op3text = "1endl0"
+        self.op4text = "2endl0"
+        self.text.set(self.t)
+        self.label = tk.Label(self.base, textvariable=self.text)
+        self.label.pack()
+        tk.Button(self.base, text = self.op1text, command=self.op1).pack()
+        tk.Button(self.base, text = self.op2text, command=self.op2).pack()
+        tk.Button(self.base, text = self.op3text, command=self.op3).pack()
+        tk.Button(self.base, text = self.op4text, command=self.op4).pack()
+        self.base.mainloop()
+
+    def op1(self):
+        msg.showerror("哎呀錯ㄌ", "這裡應該選區域變數的 a 喔，再試試看吧")
+    def op2(self):
+        msg.showinfo("恭喜答對:D", "好耶你答對了")
+        self.base.destroy()
+    def op3(self):
+        msg.showerror("哎呀錯ㄌ", "這裡應該選區域變數的 a 喔，而且 endl 是換行\n然後return 的 0 是不會輸出的啦XD\n再試試看吧")
+    def op4(self):
+        msg.showerror("哎呀錯ㄌ", "endl 是換行，不是文字\n而且return 的 0 是不會輸出的啦XD\n再試試看吧")
+
 plot = Plot()
 dialogue = Dialogue()
 
@@ -1005,7 +1319,7 @@ def control_flow(cur_control, started):
         if next_floor == 4:
             if not floor4_entered and check_npc_event(control_loc, scene_x, floor_passed):
                 dialogue.dia_1()
-                # battle 1
+                call_battle(1) # battle 1
                 floor4_entered = True
                 floor_passed = 1
                 cutscene(0)
@@ -1016,7 +1330,7 @@ def control_flow(cur_control, started):
                 return 2
             elif floor4_entered and check_npc_event(control_loc, scene_x, floor_passed):
                 dialogue.dia_8()
-                # battle 4
+                call_battle(5) # battle 4
                 dialogue.dia_9()
                 dialogue.dia_10()
                 # battle 5
@@ -1032,7 +1346,9 @@ def control_flow(cur_control, started):
             dialogue.dia_2()
             dialogue.dia_3()
             dialogue.dia_4()
-            # battle 2
+            call_battle(2) # battle 2.1
+            call_battle(3) # battle 2.2
+            call_battle(4) # battle 2.3
             dialogue.dia_5()
             floor_passed = 1
             next_floor = 3
@@ -1212,6 +1528,19 @@ def tp_display(control, scene_x, time_frame, floor_passed):
             screen.blit(tp_point_image2, (60 + scene_x,  170 * display_ratio))
         if control != 4:
             screen.blit(tp_point_image2, (1040 * display_ratio + scene_x, 170 * display_ratio))
+
+
+def call_battle(proc):
+    if proc == 1:
+        question1()
+    elif proc == 2:
+        Q = Question2_1()
+    elif proc == 3:
+        Q = Question2_2()
+    elif proc == 4:
+        Q = Question2_3()
+    elif proc == 5:
+        Q = Question4()
 
 
 def cutscene(mode=0):
