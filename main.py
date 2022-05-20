@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from pygame.display import set_mode, update, set_caption, set_icon
+from pygame.display import set_mode, update, set_caption, set_icon, flip, init as dinit
 from pygame.transform import scale, rotate
 from pygame.image import load
 from pygame.mixer import music
@@ -41,19 +41,30 @@ chr_ypos = [180, 120, 180, 150, 150, 150] # [player, diangod, bright, foxxy, bam
 screen = set_mode((640 * display_ratio, 360 * display_ratio)) # pygame.display.set_mode()
 
 # background
-cover_image = load("images\\cover_image.png") # pygame.image.load()
-sure_to_quit_image = load("images\\sure_to_exit.png")
-floor_1_image = load("images\\floor\\1F.png")
-floor_2_image = load("images\\floor\\2F.png")
-floor_3_image = load("images\\floor\\3F.png")
-floor_4_image = load("images\\floor\\4F.png")
-Efoxxy_background = load("images\\Efoxxy.png")
-Hfoxxy_background = load("images\\Hfoxxy.png")
-arrow_down = load("images\\arrow_down.png")
-arrow_up = load("images\\arrow_up.png")
-classroom = load("images\\classroom.png")
+cover_image = load("images\\cover_image.png").convert_alpha() # pygame.image.load()
+sure_to_quit_image = load("images\\sure_to_exit.png").convert_alpha()
+floor_1_image = load("images\\floor\\1F.png").convert_alpha()
+floor_2_image = load("images\\floor\\2F.png").convert_alpha()
+floor_3_image = load("images\\floor\\3F.png").convert_alpha()
+floor_4_image = load("images\\floor\\4F.png").convert_alpha()
+Efoxxy_background = load("images\\Efoxxy.png").convert_alpha()
+Hfoxxy_background = load("images\\Hfoxxy.png").convert_alpha()
+arrow_down = load("images\\arrow_down.png").convert_alpha()
+arrow_up = load("images\\arrow_up.png").convert_alpha()
+classroom = load("images\\classroom.png").convert_alpha()
+bamboo_forest = load("images\\bamboo_forest.png").convert_alpha()
+floor_sign_12 = load("images\\1-2F.png").convert_alpha()
+floor_sign_23 = load("images\\2-3F.jfif").convert_alpha()
+floor_sign_34 = load("images\\3-4F.jfif").convert_alpha()
+floor_sign_44 = load("images\\4-4F.jfif").convert_alpha()
+warning_image = load("images\\warning.png").convert_alpha()
+thank_list = load("images\\thank_list.png").convert_alpha()
 arrow_down = scale(arrow_down, (60 * display_ratio, 40 * display_ratio))
 arrow_up = scale(arrow_up, (60 * display_ratio, 40 * display_ratio))
+floor_sign_12 = scale(floor_sign_12, (33 * display_ratio, 33 * display_ratio))
+floor_sign_23 = scale(floor_sign_23, (33 * display_ratio, 33 * display_ratio))
+floor_sign_34 = scale(floor_sign_34, (33 * display_ratio, 33 * display_ratio))
+floor_sign_44 = scale(floor_sign_44, (33 * display_ratio, 33 * display_ratio))
 if display_ratio != 3:
     cover_image = scale(cover_image, (640 * display_ratio, 360 * display_ratio))
     floor_1_image = scale(floor_1_image, (1153 * display_ratio, 360 * display_ratio))
@@ -63,6 +74,8 @@ if display_ratio != 3:
     Efoxxy_background = scale(Efoxxy_background, (640 * display_ratio, 360 * display_ratio))
     Hfoxxy_background = scale(Hfoxxy_background, (640 * display_ratio, 360 * display_ratio))
     classroom = scale(classroom, (640 * display_ratio, 360 * display_ratio))
+    bamboo_forest = scale(bamboo_forest, (640 * display_ratio, 360 * display_ratio))
+    warning_image = scale(warning_image, (640 * display_ratio, 360 * display_ratio))
 background_paper = [cover_image, floor_1_image, floor_2_image, floor_3_image, floor_4_image]
 
 
@@ -73,19 +86,23 @@ set_icon(logo) # pygame.display.set_icon
 
 # Objects
 keys = []
-quit_icon = load("images\\quit.png") # pygame.image.load()
+quit_icon = load("images\\quit.png").convert_alpha() # pygame.image.load()
 quit_icon = scale(quit_icon, (60 * display_ratio, 24 * display_ratio)) # pygame.transform.scale
 
-player_front = load("images\\8bit\\player_front.png")
-player_left0 = load("images\\8bit\\player_left0.png")
-player_left1 = load("images\\8bit\\player_left1.png")
-player_left2 = load("images\\8bit\\player_left2.png")
-player_right0 = load("images\\8bit\\player_right0.png")
-player_right1 = load("images\\8bit\\player_right1.png")
-player_right2 = load("images\\8bit\\player_right2.png")
-tp_point_image1 = load("images\\tp1.png")
-tp_point_image2 = load("images\\tp2.png")
-key_f = load("images\\key_f.png")
+player_front = load("images\\8bit\\player_front.png").convert_alpha()
+player_left0 = load("images\\8bit\\player_left0.png").convert_alpha()
+player_left1 = load("images\\8bit\\player_left1.png").convert_alpha()
+player_left2 = load("images\\8bit\\player_left2.png").convert_alpha()
+player_right0 = load("images\\8bit\\player_right0.png").convert_alpha()
+player_right1 = load("images\\8bit\\player_right1.png").convert_alpha()
+player_right2 = load("images\\8bit\\player_right2.png").convert_alpha()
+foxxy_left0 = load("images\\8bit\\foxxy_left0.png").convert_alpha()
+foxxy_left1 = load("images\\8bit\\foxxy_left1.png").convert_alpha()
+foxxy_right0 = load("images\\8bit\\foxxy_right0.png").convert_alpha()
+foxxy_right1 = load("images\\8bit\\foxxy_right1.png").convert_alpha()
+tp_point_image1 = load("images\\tp1.png").convert_alpha()
+tp_point_image2 = load("images\\tp2.png").convert_alpha()
+key_f = load("images\\key_f.png").convert_alpha()
 
 player_front = scale(player_front, (70 * display_ratio, 98 * display_ratio)) # 450 * 11/38 * display_ratio
 player_left0 = scale(player_left0, (65 * display_ratio, 98 * display_ratio))
@@ -94,15 +111,19 @@ player_left2 = scale(player_left2, (65 * display_ratio, 98 * display_ratio))
 player_right0 = scale(player_right0, (65 * display_ratio, 98 * display_ratio))
 player_right1 = scale(player_right1, (65 * display_ratio, 98 * display_ratio))
 player_right2 = scale(player_right2, (65 * display_ratio, 98 * display_ratio))
+foxxy_left0 = scale(foxxy_left0, (65 * display_ratio, 98 * display_ratio))
+foxxy_left1 = scale(foxxy_left1, (65 * display_ratio, 98 * display_ratio))
+foxxy_right0 = scale(foxxy_right0, (65 * display_ratio, 98 * display_ratio))
+foxxy_right1 = scale(foxxy_right1, (65 * display_ratio, 98 * display_ratio))
 tp_point_image1 = scale(tp_point_image1, (100 * display_ratio, 100 * display_ratio))
 tp_point_image2 = scale(tp_point_image2, (100 * display_ratio, 100 * display_ratio))
 key_f = scale(key_f, (30 * display_ratio, 30 * display_ratio))
 
-foxyy_8bit = load("images\\8bit\\Foxxy_8bit.png")
-bamboo_8bit = load("images\\8bit\\Bamboo_8bit.png")
-bright_8bit = load("images\\8bit\\Bright_8bit.png")
-dianGod_8bit = load("images\\8bit\\DianGod_8bit.png")
-fire_8bit = load("images\\8bit\\Fire_8bit.png")
+foxyy_8bit = load("images\\8bit\\Foxxy_8bit.png").convert_alpha()
+bamboo_8bit = load("images\\8bit\\Bamboo_8bit.png").convert_alpha()
+bright_8bit = load("images\\8bit\\Bright_8bit.png").convert_alpha()
+dianGod_8bit = load("images\\8bit\\DianGod_8bit.png").convert_alpha()
+fire_8bit = load("images\\8bit\\Fire_8bit.png").convert_alpha()
 
 foxyy_8bit = scale(foxyy_8bit, (80 * display_ratio, 98 * display_ratio))
 bamboo_8bit = scale(bamboo_8bit, (80 * display_ratio, 98 * display_ratio))
@@ -111,30 +132,31 @@ dianGod_8bit = scale(dianGod_8bit, (80 * display_ratio, 98 * display_ratio))
 fire_8bit = scale(fire_8bit, (80 * display_ratio, 98 * display_ratio))
 
 player_images = [[player_front], [player_left0, player_left1, player_left2], [player_right0, player_right1, player_right2]]
+foxxy_images = [[foxyy_8bit], [foxxy_left0, foxxy_left1], [foxxy_right0, foxxy_right1]]
 npc_images = [foxyy_8bit, foxyy_8bit, bright_8bit, bamboo_8bit, dianGod_8bit, fire_8bit]
 
 
 # characters
-player_0 = load("images\\character\\player\\player_0.png")
-player_1 = load("images\\character\\player\\player_1.png")
-player_2 = load("images\\character\\player\\player_2.png")
-bright_0 = load("images\\character\\bright\\bright_0.png")
-bright_1 = load("images\\character\\bright\\bright_1.png")
-bright_2 = load("images\\character\\bright\\bright_2.png")
-bright_3 = load("images\\character\\bright\\bright_3.png")
-bamboo_0 = load("images\\character\\bamboo\\bamboo_0.png")
-bamboo_1 = load("images\\character\\bamboo\\bamboo_1.png")
-bamboo_2 = load("images\\character\\bamboo\\bamboo_2.png")
-bamboo_3 = load("images\\character\\bamboo\\bamboo_3.png")
-diangod_0 = load("images\\character\\diangod\\diangod_0.png")
-diangod_1 = load("images\\character\\diangod\\diangod_1.png")
-diangod_2 = load("images\\character\\diangod\\diangod_2.png")
-fire_0 = load("images\\character\\fire\\fire_0.png")
-fire_1 = load("images\\character\\fire\\fire_1.png")
-fire_2 = load("images\\character\\fire\\fire_2.png")
-foxxy_0 = load("images\\character\\foxxy\\foxxy_0.png")
-foxxy_1 = load("images\\character\\foxxy\\foxxy_1.png")
-foxxy_2 = load("images\\character\\foxxy\\foxxy_2.png")
+player_0 = load("images\\character\\player\\player_0.png").convert_alpha()
+player_1 = load("images\\character\\player\\player_1.png").convert_alpha()
+player_2 = load("images\\character\\player\\player_2.png").convert_alpha()
+bright_0 = load("images\\character\\bright\\bright_0.png").convert_alpha()
+bright_1 = load("images\\character\\bright\\bright_1.png").convert_alpha()
+bright_2 = load("images\\character\\bright\\bright_2.png").convert_alpha()
+bright_3 = load("images\\character\\bright\\bright_3.png").convert_alpha()
+bamboo_0 = load("images\\character\\bamboo\\bamboo_0.png").convert_alpha()
+bamboo_1 = load("images\\character\\bamboo\\bamboo_1.png").convert_alpha()
+bamboo_2 = load("images\\character\\bamboo\\bamboo_2.png").convert_alpha()
+bamboo_3 = load("images\\character\\bamboo\\bamboo_3.png").convert_alpha()
+diangod_0 = load("images\\character\\diangod\\diangod_0.png").convert_alpha()
+diangod_1 = load("images\\character\\diangod\\diangod_1.png").convert_alpha()
+diangod_2 = load("images\\character\\diangod\\diangod_2.png").convert_alpha()
+fire_0 = load("images\\character\\fire\\fire_0.png").convert_alpha()
+fire_1 = load("images\\character\\fire\\fire_1.png").convert_alpha()
+fire_2 = load("images\\character\\fire\\fire_2.png").convert_alpha()
+foxxy_0 = load("images\\character\\foxxy\\foxxy_0.png").convert_alpha()
+foxxy_1 = load("images\\character\\foxxy\\foxxy_1.png").convert_alpha()
+foxxy_2 = load("images\\character\\foxxy\\foxxy_2.png").convert_alpha()
 
 
 player_0 = scale(player_0, (200 * display_ratio, 300 * display_ratio))
@@ -417,6 +439,7 @@ class Plot :
         plot_5_0 = load("images\\plot\\plot_5_0.png")
         if display_ratio == 2:
             plot_5_0 = scale(plot_5_0, (1280, 720))
+        screen.blit(Hfoxxy_background, (0, 0))
         screen.blit(plot_5_0, (0,0)) # 之後，你成為了下一任電神，在你的帶領之下，組織不再繼續作亂，反而變成喜歡不斷的教導程式能力，培養人才的組織，這就是我們現在的社團—CRC電算社
         update()
         check_mouse()
@@ -721,9 +744,14 @@ class Dialogue :
         update()
         check_mouse()
 
+        screen.blit(bamboo_forest, (0,0))
+        update()
+        check_mouse()
+
         story_backgroud()
         screen.blit(player_1, (chr_xpos[1], chr_ypos[0]))
         screen.blit(bamboo_3, (chr_xpos[2], chr_ypos[4]))
+        screen.blit(bamboo_forest, (0,0))
         screen.blit(dia_6_12, (0,0)) # （門口前瞬間長出一堆竹子，賭住了唯一的出口，看來只能戰鬥了）
         update()
         check_mouse()
@@ -1110,9 +1138,9 @@ class Question2_2():
         self.choose = False
         # beware, there are lots of space in the text
         self.t = '''
-有了變數的基礎，Foxyy 請你實作「拿出一個兩位數的兩個數字、分別輸出」。
+有了變數的基礎，Foxxy 請你實作「拿出一個兩位數的兩個數字、分別輸出」。
 a 為該兩位數，現在請你輸出 a 的十位數和個位數，中間輸出一個空格，行尾輸出空格。
-Foxyy 先幫你寫好了一些 code，如下：
+Foxxy 先幫你寫好了一些 code，如下：
 
 #include <iostream>
 int main() {                   
@@ -1168,11 +1196,11 @@ class Question2_3():
         self.choose = False
         # beware, there are lots of space in the text
         self.t = '''
-現在 foxyy 拿出一排重量不一的蘋果排成一列，但他們的大小並不一樣，
+現在 foxxy 拿出一排重量不一的蘋果排成一列，但他們的大小並不一樣，
 你只知道他們已經把蘋果按照重量由左至右排序過了。
 你剛跟電神戰鬥完，突然感到口乾舌燥，急著想拿一顆蘋果吃掉，
-但 foxyy 想到了一個好玩的遊戲。他請你找到一顆重量剛剛好為 w 的蘋果，當你找到它就可以把它吃掉。
-因為你快渴死了，所以你想要在最快時間內找到 foxyy 指定的蘋果。
+但 foxxy 想到了一個好玩的遊戲。他請你找到一顆重量剛剛好為 w 的蘋果，當你找到它就可以把它吃掉。
+因為你快渴死了，所以你想要在最快時間內找到 foxxy 指定的蘋果。
 請問下列哪一種搜尋方法找到蘋果的速度會最快？
 '''
         self.op1text = '''
@@ -1199,9 +1227,9 @@ class Question2_3():
         self.base.mainloop()
 
     def op1(self):
-        msg.showerror("哎呀錯ㄌ", "你正準備這樣做的時候，Foxyy 趕快跳出來阻止你這麼做\n因為在你找到對的蘋果之前，你會因為找太久就渴死了。\n再看看有沒有更快的搜尋方法吧！")
+        msg.showerror("哎呀錯ㄌ", "你正準備這樣做的時候，Foxxy 趕快跳出來阻止你這麼做\n因為在你找到對的蘋果之前，你會因為找太久就渴死了。\n再看看有沒有更快的搜尋方法吧！")
     def op2(self):
-        msg.showerror("哎呀錯ㄌ", "Foxxy 都快哭了，他好不容易幫你照重量排序好結果又被你打亂了！\n大小跟重量沒有絕對關係，所以不能用大小來判斷重量啦！\n好在好心的 Foxyy 又幫你把蘋果照重量排序好了，再試另一個答案吧！")
+        msg.showerror("哎呀錯ㄌ", "Foxxy 都快哭了，他好不容易幫你照重量排序好結果又被你打亂了！\n大小跟重量沒有絕對關係，所以不能用大小來判斷重量啦！\n好在好心的 Foxxy 又幫你把蘋果照重量排序好了，再試另一個答案吧！")
     def op3(self):
         msg.showinfo("恭喜答對:D", "好耶你答對了，你吃到了 foxxy 精心幫你挑選最好吃的蘋果！")
         self.base.destroy()
@@ -1254,6 +1282,56 @@ int main() {
         msg.showerror("哎呀錯ㄌ", "這裡應該選區域變數的 a 喔，而且 endl 是換行\n然後return 的 0 是不會輸出的啦XD\n再試試看吧")
     def op4(self):
         msg.showerror("哎呀錯ㄌ", "endl 是換行，不是文字\n而且return 的 0 是不會輸出的啦XD\n再試試看吧")
+
+
+class Question5():
+    def __init__(self):
+        self.base = tk.Tk()
+        self.base.title("最終決戰！！！！")
+        self.text = tk.StringVar()
+        self.base.geometry("600x400")
+        self.proc = 0
+        self.choose = False
+        # beware, there are lots of space in the text
+        self.t = '''
+Foxxy / 電神狂妄地笑著，他準備拿他幼稚園就會的雜湊來電爛你。
+請運用你的計算能力算出 Foxxy / 電神究竟說了些什麼！
+
+已知一個英文字（例：car）是由一個一個英文字母所組成
+我們定義 w_1 是字串中倒數第一個字母，w_2 是字串中倒數第二個字母...
+而各個英文字母會被轉換成它在 alphabet 裡的順序，如 'a' = 1。
+則 car 的 w_1 = 18, w_2 = 1, w_3 = 3
+它會被雜湊成 w_1 * p^1 + w_2 * p^2 + w_3 * p^3 +...
+若 p = 31，則雜湊值為 18 * (31^1) + 1 * (31^2) + 3 * (31^3) = 90892。
+
+Foxxy / 電神現在對你說 "3963598"，請問他是什麼意思？
+提示：你有計算機，這不是考試，是決鬥，所以盡量用！
+'''
+        self.op1text = "cyf（卡油飯）"
+        self.op2text = "clm（卡拉麵）"
+        self.op3text = "weak（弱）"
+        self.op4text = "dian（電）"
+        self.text.set(self.t)
+        self.label = tk.Label(self.base, textvariable=self.text)
+        self.label.pack()
+        tk.Button(self.base, text = self.op1text, command=self.op1).pack()
+        tk.Button(self.base, text = self.op2text, command=self.op2).pack()
+        tk.Button(self.base, text = self.op3text, command=self.op3).pack()
+        tk.Button(self.base, text = self.op4text, command=self.op4).pack()
+        self.base.mainloop()
+
+    def op1(self):
+        msg.showerror("哎呀錯ㄌ", "沒有油飯可以卡啦 > < \n自己想辦法去找油飯")
+    def op2(self):
+        msg.showerror("哎呀錯ㄌ", "拉麵好ㄘ\n但答案不是這個ㄛ")
+
+    def op3(self):
+        msg.showerror("哎呀錯ㄌ", "你不弱 :angry:")
+    def op4(self):
+        msg.showinfo("恭喜答對:D", "沒錯！你真電~~~")
+        self.base.destroy()
+
+
 
 plot = Plot()
 dialogue = Dialogue()
@@ -1312,6 +1390,9 @@ def control_flow(cur_control, started):
     if cur_control == -1:
         return -1
     elif started == 0 and mouse == "down":
+        screen.blit(warning_image, (0, 0))
+        update()
+        check_mouse()
         return 1
     elif not started:
         return 0
@@ -1333,11 +1414,12 @@ def control_flow(cur_control, started):
                 call_battle(5) # battle 4
                 dialogue.dia_9()
                 dialogue.dia_10()
-                # battle 5
+                call_battle(6) # battle 5
                 dialogue.dia_11()
                 plot.plot_5()
                 floor_passed = 1
                 print("遊戲結束:D, 謝謝你的參與:D")
+                thanks_display()
                 return 1
             else:
                 return control_loc
@@ -1498,12 +1580,32 @@ def player_display(control, player_x, time_frame):
     if side == 0:
         feet = 0
     elif time_frame < 10:
-        feet = 1
+        feet = 0
     else:
-        feet = 2
+        feet = 1
     player = player_images[side][feet]
     if control > 0:
         screen.blit(player, (player_x, 180 * display_ratio))
+
+
+def foxxy_display(control, player_x, time_frame):
+    if next_floor != 3:
+        return
+    if keys[K_d]: # pygame.K_d
+        side = 2
+    elif keys[K_a]:
+        side = 1
+    else:
+        side = 0
+    if side == 0:
+        feet = 0
+    elif time_frame < 10:
+        feet = 0
+    else:
+        feet = 1
+    foxxy = foxxy_images[side][feet]
+    if control > 0:
+        screen.blit(foxxy, (player_x - 60 * display_ratio, 180 * display_ratio))
 
 
 def npc_display(control, scene_x, floor_passed, next_floor):
@@ -1530,6 +1632,39 @@ def tp_display(control, scene_x, time_frame, floor_passed):
             screen.blit(tp_point_image2, (1040 * display_ratio + scene_x, 170 * display_ratio))
 
 
+
+def floorSign_display(control, scene_x):
+    if control == 1:
+        # screen.blit(floor_sign_12, (110 * display_ratio + scene_x, 107 * display_ratio))
+        screen.blit(floor_sign_12, (1000 * display_ratio + scene_x, 108 * display_ratio))
+    elif control == 2:
+        screen.blit(floor_sign_12, (110 * display_ratio + scene_x, 107 * display_ratio))
+        screen.blit(floor_sign_23, (1000 * display_ratio + scene_x, 108 * display_ratio))
+    elif control == 3:
+        screen.blit(floor_sign_23, (110 * display_ratio + scene_x, 107 * display_ratio))
+        screen.blit(floor_sign_34, (1000 * display_ratio + scene_x, 108 * display_ratio))
+    elif control == 4:
+        screen.blit(floor_sign_34, (110 * display_ratio + scene_x, 107 * display_ratio))
+        screen.blit(floor_sign_44, (1000 * display_ratio + scene_x, 108 * display_ratio))
+
+
+def thanks_display():
+    screen.fill((0, 0, 0))
+    update()
+    y = 1500
+    while y > -11500:
+        screen.blit(thank_list, (0, y))
+        print(y)
+        y -= 10
+        update()
+        sleep(0.03)
+        if y % 1000 == 0:
+            get()
+            dinit()
+    check_mouse()
+        
+
+
 def call_battle(proc):
     if proc == 1:
         question1()
@@ -1541,6 +1676,8 @@ def call_battle(proc):
         Q = Question2_3()
     elif proc == 5:
         Q = Question4()
+    elif proc == 6:
+        Q = Question5()
 
 
 def cutscene(mode=0):
@@ -1615,7 +1752,10 @@ while running:
     # background fill
     background_display(control, background_paper[control], scene_x)
     tp_display(control, scene_x, time_frame, floor_passed)
+    floorSign_display(control, scene_x)
     npc_display(control, scene_x, floor_passed, next_floor)
     player_display(control, player_x, time_frame)
+    foxxy_display(control, player_x, time_frame)
     control = control_flow(control, started)
     update() # pygame.display.update()
+    sleep(0.01)
