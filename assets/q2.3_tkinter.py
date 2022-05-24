@@ -6,7 +6,7 @@ class Q2():
         self.base = tk.Tk()
         self.base.title("問題四")
         self.text = tk.StringVar()
-        self.base.geometry("600x400")
+        self.base.geometry("800x650")
         self.proc = 0
         self.choose = False
         # beware, there are lots of space in the text

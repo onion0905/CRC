@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
+from dis import dis
 from pygame.display import set_mode, update, set_caption, set_icon, flip, init as dinit
 from pygame.transform import scale, rotate
 from pygame.image import load
 from pygame.mixer import music
 from pygame.draw import rect as draw_rect, line
-from pygame import init, Rect, QUIT, MOUSEBUTTONDOWN, K_d, K_f, K_j, K_k, K_a, K_f
+from pygame import init, Rect, QUIT, MOUSEBUTTONDOWN, K_d, K_f, K_j, K_k, K_a, K_f, KEYDOWN, K_UP, K_DOWN, K_LEFT, K_RIGHT, K_b
 from pygame.mouse import get_pos
 from pygame.key import get_pressed
 from pygame.event import get
@@ -13,12 +14,13 @@ from os import system
 from subprocess import run as subrun
 import tkinter as tk
 import tkinter.messagebox as msg
+import tkinter.font as tkFont
 
 # intialize
 init() # pygame.init()
 
 # Global Variable
-display_ratio = 3 # (640 * ratio, 360 * ratio)
+display_ratio = 2 # (640 * ratio, 360 * ratio)
 speed = (display_ratio - 1) * 10
 running = True
 mouse = ""
@@ -32,6 +34,8 @@ started = 0
 floor_passed = 1
 floor4_entered = False
 next_floor = 4
+egg_frame = 0
+egg_count = 0
 
 # constant
 chr_xpos = [220 * display_ratio, 110 * display_ratio, 300 * display_ratio]
@@ -76,6 +80,7 @@ if display_ratio != 3:
     classroom = scale(classroom, (640 * display_ratio, 360 * display_ratio))
     bamboo_forest = scale(bamboo_forest, (640 * display_ratio, 360 * display_ratio))
     warning_image = scale(warning_image, (640 * display_ratio, 360 * display_ratio))
+    thank_list = scale(thank_list, (640 * display_ratio, 3700 * display_ratio))
 background_paper = [cover_image, floor_1_image, floor_2_image, floor_3_image, floor_4_image]
 
 
@@ -973,13 +978,15 @@ class Dialogue :
 
 def question1():
     base = tk.Tk()
+    base.wm_attributes('-topmost',1)
     base.title("問題一")
     t = '''
     電神看著你狂妄地笑著，心想著又有一個店小二來送菜了。
-    現在他的助手突然帶著重要的訊息前來，他不想讓你聽到內容，但你擋在電神面前，以致於助手無法傳遞訊息。
+    現在他的助手突然帶著重要的訊息前來，他不想讓你聽到內容
+    但你擋在電神面前，以致於助手無法傳遞訊息。
     於是，他決定使用「雜湊」來產生一串你聽不懂的數字，再請電神用已經講好的方法來解密。
     問題是，雜湊並非一個簡單的技巧，而助手因為不夠電而忘了如何雜湊
-    所以他對你提出一個條件：如果你幫他雜湊並把訊息傳遞給電神，則你會知道訊息的所有內容。
+    所以他對你提出一個條件：如果你幫他雜湊並把訊息傳遞給電神，那他就可以幫你講幾句好話。
     好奇的你心想，這是什麼簡單的東西，雜湊我幼稚園就會了！
     現在請你找到兩個好的常數雜湊該訊息，讓電神解密時不會發生碰撞或其他錯誤。
     1. p = 0, m = 1
@@ -1027,6 +1034,7 @@ def question1():
 class Question2_1():
     def __init__(self):
         self.base = tk.Tk()
+        self.base.wm_attributes('-topmost',1)
         self.base.title("問題二")
         self.text = tk.StringVar()
         self.base.geometry("800x650")
@@ -1131,6 +1139,7 @@ Foxyy 看到你昏昏欲睡的表情，決定來給你實際操作一下程式�
 class Question2_2():
     def __init__(self):
         self.base = tk.Tk()
+        self.base.wm_attributes('-topmost',1)
         self.base.title("問題三")
         self.text = tk.StringVar()
         self.base.geometry("600x500")
@@ -1189,6 +1198,7 @@ std::cout << a << std::endl;
 class Question2_3():
     def __init__(self):
         self.base = tk.Tk()
+        self.base.wm_attributes('-topmost',1)
         self.base.title("問題四")
         self.text = tk.StringVar()
         self.base.geometry("600x400")
@@ -1240,6 +1250,7 @@ class Question2_3():
 class Question4():
     def __init__(self):
         self.base = tk.Tk()
+        self.base.wm_attributes('-topmost',1)
         self.base.title("問題五")
         self.text = tk.StringVar()
         self.base.geometry("600x400")
@@ -1287,6 +1298,7 @@ int main() {
 class Question5():
     def __init__(self):
         self.base = tk.Tk()
+        self.base.wm_attributes('-topmost',1)
         self.base.title("最終決戰！！！！")
         self.text = tk.StringVar()
         self.base.geometry("600x400")
@@ -1351,6 +1363,8 @@ def initialize():
     global floor_passed
     global floor4_entered
     global next_floor
+    global egg_frame
+    global egg_count
     scene_x = -5
     player_x = 320 * display_ratio - 70
     foxxy_x = player_x - 50 * display_ratio
@@ -1363,6 +1377,8 @@ def initialize():
     floor_passed = 1
     floor4_entered = False
     next_floor = 4
+    egg_frame = 0
+    egg_count = 0
     system("cls")
 
 
@@ -1654,15 +1670,17 @@ def thanks_display():
     y = 1500
     while y > -11500:
         screen.blit(thank_list, (0, y))
-        print(y)
         y -= 10
         update()
         sleep(0.03)
         if y % 1000 == 0:
             get()
-            dinit()
     check_mouse()
         
+
+def egg():
+    global egg_frame
+    pass
 
 
 def call_battle(proc):
@@ -1722,6 +1740,8 @@ def scroll_walk():
 def pygame_event_response(mouse_pos):
     global running
     global mouse
+    global egg_frame
+    global egg_count
     for event in get(): # pygame.event.get()
         if event.type == QUIT: # pygame.QUIT
             check_quit(mouse_pos)
@@ -1731,6 +1751,68 @@ def pygame_event_response(mouse_pos):
             check_quit(mouse_pos)
         if event.type != MOUSEBUTTONDOWN:
             mouse = ""
+        if event.type == KEYDOWN:
+            print("keydown")
+            if egg_frame == 0:
+                print("count = 0")
+                if event.key == K_UP:
+                    print("UP")
+                    egg_count = 1
+                    egg_frame += 1
+            else:
+                if egg_frame > 500:
+                    egg_frame = 0
+                else:
+                    egg_frame += 1
+                    if egg_count == 1:
+                        if event.key == K_UP:
+                            egg_count = 2
+                        else:
+                            egg_count = 0
+                    elif egg_count == 2:
+                        if event.key == K_DOWN:
+                            egg_count += 1
+                        else:
+                            egg_count = 0
+                    elif egg_count == 3:
+                        if event.key == K_DOWN:
+                            egg_count += 1
+                        else:
+                            egg_count = 0
+                    elif egg_count == 4:
+                        if event.key == K_LEFT:
+                            egg_count += 1
+                        else:
+                            egg_count = 0
+                    elif egg_count == 5:
+                        if event.key == K_RIGHT:
+                            egg_count += 1
+                        else:
+                            egg_count = 0
+                    elif egg_count == 6:
+                        if event.key == K_LEFT:
+                            egg_count += 1
+                        else:
+                            egg_count = 0
+                    elif egg_count == 7:
+                        if event.key == K_RIGHT:
+                            egg_count += 1
+                        else:
+                            egg_count = 0
+                    elif egg_count == 8:
+                        if event.key == K_a:
+                            egg_count += 1
+                        else:
+                            egg_count = 0
+                    elif egg_count == 9:
+                        if event.key == K_b:
+                            egg_count += 1
+                            thanks_display()
+                            egg_count = 0
+                        else:
+                            egg_count = 0
+                            
+
 
 
 # Game Loop
