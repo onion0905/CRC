@@ -1,4 +1,6 @@
 # CRC
+meowwwww 
+
 CRC exhibition
 
 To execute the main.py file, please install the pygame packge first.  
