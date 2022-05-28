@@ -11,3 +11,5 @@ pip3 install pygame
 All you need to do is execute the `main.py`.  
 The executable version will be published someday.  
 Enjoy the game! 
+## Usage
+Keyboard A and D to move the character, while the mouse is used to confirm any execution.
