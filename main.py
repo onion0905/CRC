@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
-from dis import dis
-from pygame.display import set_mode, update, set_caption, set_icon, flip, init as dinit
+from pygame.display import set_mode, update, set_caption, set_icon
 from pygame.transform import scale, rotate
 from pygame.image import load
 from pygame.mixer import music
 from pygame.draw import rect as draw_rect, line
-from pygame import init, Rect, QUIT, MOUSEBUTTONDOWN, K_d, K_f, K_j, K_k, K_a, K_f, KEYDOWN, K_UP, K_DOWN, K_LEFT, K_RIGHT, K_b
+from pygame import init as pygame_init, Rect, QUIT, MOUSEBUTTONDOWN, K_d, K_f, K_j, K_k, K_a, K_f, KEYDOWN, K_UP, K_DOWN, K_LEFT, K_RIGHT, K_b
 from pygame.mouse import get_pos
 from pygame.key import get_pressed
 from pygame.event import get
+from pygame.time import Clock
 from time import time, sleep
 from os import system
-from subprocess import run as subrun
 import tkinter as tk
 import tkinter.messagebox as msg
-import tkinter.font as tkFont
+from pyvidplayer import Video
 
 # intialize
-init() # pygame.init()
+pygame_init() # pygame.init()
 
 # Global Variable
-display_ratio = 2 # (640 * ratio, 360 * ratio)
+display_ratio = 3 # (640 * ratio, 360 * ratio)
 speed = (display_ratio - 1) * 10
 running = True
 mouse = ""
@@ -36,10 +35,12 @@ floor4_entered = False
 next_floor = 4
 egg_frame = 0
 egg_count = 0
+clock = Clock()
 
 # constant
 chr_xpos = [220 * display_ratio, 110 * display_ratio, 300 * display_ratio]
 chr_ypos = [180, 120, 180, 150, 150, 150] # [player, diangod, bright, foxxy, bamboo, fire]
+FPS = 60
 
 # set screen
 screen = set_mode((640 * display_ratio, 360 * display_ratio)) # pygame.display.set_mode()
@@ -93,6 +94,8 @@ set_icon(logo) # pygame.display.set_icon
 keys = []
 quit_icon = load("images\\quit.png").convert_alpha() # pygame.image.load()
 quit_icon = scale(quit_icon, (60 * display_ratio, 24 * display_ratio)) # pygame.transform.scale
+
+
 
 player_front = load("images\\8bit\\player_front.png").convert_alpha()
 player_left0 = load("images\\8bit\\player_left0.png").convert_alpha()
@@ -262,7 +265,7 @@ def draw_back():
 
 def mayo_main():
     global screen
-    init() # pygame.init()
+    pygame_init() # pygame.init()
     screen = set_mode((640 * display_ratio, 360 * display_ratio)) # pygame.display.set_mode
     running = True
     back = 0
@@ -391,7 +394,7 @@ def mayo_main():
         time_loop = now_end_time - now_time
         if time_loop < 0.001 and showing_array:
             sleep(0.001-time_loop)
-        if time_pass > 10: # remember to change
+        if time_pass > 110: # remember to change
             break
     screen = set_mode((640 * display_ratio, 360 * display_ratio))
     return
@@ -1344,6 +1347,68 @@ Foxxy / 電神現在對你說 "3963598"，請問他是什麼意思？
         self.base.destroy()
 
 
+class MusicGameIntro():
+    def __init__(self):
+        self.base = tk.Tk()
+        self.base.title("提示")
+        self.text = tk.StringVar()
+        self.base.geometry("450x200")
+        self.proc = 0
+        self.choose = False
+        self.t = '''
+        接下來 Bamboo 會不斷地向你丟出美乃滋 (不要問為什麼)
+        因為美乃滋是一種樂器，所以在美乃滋向你襲來的時候，同時會有音樂播出。
+        為了抵擋 Bamboo 的攻擊，你必須接住美乃滋
+        按下 d、f、j、k 來接住對應位置的美乃滋吧！ (對啦其實就是音遊)
+        ps: 如果你有帶有線耳機的話，接上電腦吧！
+        音樂：ウミユリ海底譚 / n-buna
+        '''
+        
+        self.text.set(self.t)
+        self.label = tk.Label(self.base, textvariable=self.text)
+        self.button = tk.Button(self.base, text = "我懂了", command=self.func)
+        self.label.pack()
+        self.button.pack()
+        self.base.mainloop()
+
+
+    def func(self):
+        self.base.destroy()
+
+
+class OpeningSkip():
+    def __init__(self):
+        global skip_opening
+        self.base = tk.Tk()
+        self.base.title("")
+        self.text = tk.StringVar()
+        self.base.geometry("200x150")
+        self.proc = 0
+        self.choose = False
+        self.t = '''
+        確定跳過前導劇情？
+        '''
+        
+        self.text.set(self.t)
+        self.label = tk.Label(self.base, textvariable=self.text)
+        self.buttonY = tk.Button(self.base, text = "確定", command=self.yes)
+        self.buttonN = tk.Button(self.base, text = "繼續看", command=self.no)
+        self.label.pack()
+        self.buttonY.pack()
+        self.buttonN.pack()
+        self.base.mainloop()
+        skip_opening = False
+
+
+    def yes(self):
+        global skip_opening
+        skip_opening = True
+        print("Yes")
+        self.base.destroy()
+
+    def no(self):
+        print("No")
+        self.base.destroy()
 
 plot = Plot()
 dialogue = Dialogue()
@@ -1365,6 +1430,10 @@ def initialize():
     global next_floor
     global egg_frame
     global egg_count
+    global clock
+    global keys
+    global mouse_pos
+    global skip_opening
     scene_x = -5
     player_x = 320 * display_ratio - 70
     foxxy_x = player_x - 50 * display_ratio
@@ -1379,6 +1448,10 @@ def initialize():
     next_floor = 4
     egg_frame = 0
     egg_count = 0
+    clock = Clock()
+    keys = get_pressed() # pygame.key.get_pressed()
+    mouse_pos = get_pos() # pygame.mouse.get_pos()
+    skip_opening = False
     system("cls")
 
 
@@ -1386,6 +1459,7 @@ def control_flow(cur_control, started):
     global floor_passed
     global floor4_entered
     global next_floor
+    global mouse
     bias = check_tp_f(cur_control, player_x, floor_passed)
     control_loc = cur_control + bias
     if bias != 0:
@@ -1409,6 +1483,8 @@ def control_flow(cur_control, started):
         screen.blit(warning_image, (0, 0))
         update()
         check_mouse()
+        mouse = ""
+        intro()
         return 1
     elif not started:
         return 0
@@ -1455,6 +1531,7 @@ def control_flow(cur_control, started):
         elif next_floor == 3 and check_npc_event(control_loc, scene_x, floor_passed):
             cutscene(0)
             dialogue.dia_6()
+            call_battle(7)
             mayo_main() # battle 3
             dialogue.dia_7()
             plot.plot_3()
@@ -1648,7 +1725,6 @@ def tp_display(control, scene_x, time_frame, floor_passed):
             screen.blit(tp_point_image2, (1040 * display_ratio + scene_x, 170 * display_ratio))
 
 
-
 def floorSign_display(control, scene_x):
     if control == 1:
         # screen.blit(floor_sign_12, (110 * display_ratio + scene_x, 107 * display_ratio))
@@ -1696,6 +1772,8 @@ def call_battle(proc):
         Q = Question4()
     elif proc == 6:
         Q = Question5()
+    elif proc == 7:
+        Q = MusicGameIntro()
 
 
 def cutscene(mode=0):
@@ -1713,6 +1791,7 @@ def cutscene(mode=0):
 def story_backgroud():
     screen.fill((0, 0, 0))
     screen.blit(classroom, (0, 0))
+
 
 def scroll_walk():
     global scene_x
@@ -1752,9 +1831,7 @@ def pygame_event_response(mouse_pos):
         if event.type != MOUSEBUTTONDOWN:
             mouse = ""
         if event.type == KEYDOWN:
-            print("keydown")
             if egg_frame == 0:
-                print("count = 0")
                 if event.key == K_UP:
                     print("UP")
                     egg_count = 1
@@ -1800,12 +1877,12 @@ def pygame_event_response(mouse_pos):
                         else:
                             egg_count = 0
                     elif egg_count == 8:
-                        if event.key == K_a:
+                        if event.key == K_b:
                             egg_count += 1
                         else:
                             egg_count = 0
                     elif egg_count == 9:
-                        if event.key == K_b:
+                        if event.key == K_a:
                             egg_count += 1
                             thanks_display()
                             egg_count = 0
@@ -1813,31 +1890,55 @@ def pygame_event_response(mouse_pos):
                             egg_count = 0
                             
 
+def intro():
+    opening_video = Video("images\opening.mov")
+    opening_video.set_size((640 * display_ratio, 360 * display_ratio))
+    while True:
+        opening_video.draw(screen, (0, 0), force_draw=False)
+        update()
+        clock.tick(FPS)
+        pygame_event_response(mouse_pos)
+        if mouse == "down":
+            break
+            Q = OpeningSkip()
+            if skip_opening:
+                print("wow")
+                break
+
 
 
 # Game Loop
-background = background_paper[0]
+def main_game():
+    global control
+    global keys
+    global mouse_pos
+    global time_frame
+    global started
+    initialize()
+    print("點下滑鼠，開始遊戲吧:D")
+    while running:
+        # Basic Info
+        keys = get_pressed() # pygame.key.get_pressed()
+        mouse_pos = get_pos() # pygame.mouse.get_pos()
+        scroll_walk()
+        pygame_event_response(mouse_pos)
+        time_frame = (time_frame + 1) % 20
+        if control != -1:
+            ex_control = control
+        if control == -1:
+            sure_to_quit(ex_control)
+        started = control
+        # background fill
+        background_display(control, background_paper[control], scene_x)
+        tp_display(control, scene_x, time_frame, floor_passed)
+        floorSign_display(control, scene_x)
+        npc_display(control, scene_x, floor_passed, next_floor)
+        player_display(control, player_x, time_frame)
+        foxxy_display(control, player_x, time_frame)
+        control = control_flow(control, started)
+        update() # pygame.display.update()
+        clock.tick(FPS)
+
 initialize()
-print("點下滑鼠，開始遊戲吧:D")
-while running:
-    # Basic Info
-    keys = get_pressed() # pygame.key.get_pressed()
-    mouse_pos = get_pos() # pygame.mouse.get_pos()
-    scroll_walk()
-    pygame_event_response(mouse_pos)
-    time_frame = (time_frame + 1) % 20
-    if control != -1:
-        ex_control = control
-    if control == -1:
-        sure_to_quit(ex_control)
-    started = control
-    # background fill
-    background_display(control, background_paper[control], scene_x)
-    tp_display(control, scene_x, time_frame, floor_passed)
-    floorSign_display(control, scene_x)
-    npc_display(control, scene_x, floor_passed, next_floor)
-    player_display(control, player_x, time_frame)
-    foxxy_display(control, player_x, time_frame)
-    control = control_flow(control, started)
-    update() # pygame.display.update()
-    sleep(0.01)
+# intro()
+main_game()
