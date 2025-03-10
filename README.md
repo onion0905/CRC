@@ -8,8 +8,8 @@ To execute the main.py file, please install the some packge first.
 Type the following command in your terminal to install the packages if you haven't installed them.  
 ```
 pip3 install pygame
-pip install ffpyplayer
-pip install pymediainfo
+pip3 install ffpyplayer
+pip3 install pymediainfo
 ```
 Enjoy the game! 
 ## How to Play
