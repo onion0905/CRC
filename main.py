@@ -19,7 +19,7 @@ from pyvidplayer import Video
 pygame_init() # pygame.init()
 
 # Global Variable
-display_ratio = 3 # (640 * ratio, 360 * ratio)
+display_ratio = 2 # (640 * ratio, 360 * ratio)
 speed = (display_ratio - 1) * 10
 running = True
 mouse = ""
@@ -46,24 +46,24 @@ FPS = 60
 screen = set_mode((640 * display_ratio, 360 * display_ratio)) # pygame.display.set_mode()
 
 # background
-cover_image = load("images\\cover_image.png").convert_alpha() # pygame.image.load()
-sure_to_quit_image = load("images\\sure_to_exit.png").convert_alpha()
-floor_1_image = load("images\\floor\\1F.png").convert_alpha()
-floor_2_image = load("images\\floor\\2F.png").convert_alpha()
-floor_3_image = load("images\\floor\\3F.png").convert_alpha()
-floor_4_image = load("images\\floor\\4F.png").convert_alpha()
-Efoxxy_background = load("images\\Efoxxy.png").convert_alpha()
-Hfoxxy_background = load("images\\Hfoxxy.png").convert_alpha()
-arrow_down = load("images\\arrow_down.png").convert_alpha()
-arrow_up = load("images\\arrow_up.png").convert_alpha()
-classroom = load("images\\classroom.png").convert_alpha()
-bamboo_forest = load("images\\bamboo_forest.png").convert_alpha()
-floor_sign_12 = load("images\\1-2F.png").convert_alpha()
-floor_sign_23 = load("images\\2-3F.jfif").convert_alpha()
-floor_sign_34 = load("images\\3-4F.jfif").convert_alpha()
-floor_sign_44 = load("images\\4-4F.jfif").convert_alpha()
-warning_image = load("images\\warning.png").convert_alpha()
-thank_list = load("images\\thank_list.png").convert_alpha()
+cover_image = load("images/cover_image.png").convert_alpha() # pygame.image.load()
+sure_to_quit_image = load("images/sure_to_exit.png").convert_alpha()
+floor_1_image = load("images/floor/1F.png").convert_alpha()
+floor_2_image = load("images/floor/2F.png").convert_alpha()
+floor_3_image = load("images/floor/3F.png").convert_alpha()
+floor_4_image = load("images/floor/4F.png").convert_alpha()
+Efoxxy_background = load("images/Efoxxy.png").convert_alpha()
+Hfoxxy_background = load("images/Hfoxxy.png").convert_alpha()
+arrow_down = load("images/arrow_down.png").convert_alpha()
+arrow_up = load("images/arrow_up.png").convert_alpha()
+classroom = load("images/classroom.png").convert_alpha()
+bamboo_forest = load("images/bamboo_forest.png").convert_alpha()
+floor_sign_12 = load("images/1-2F.png").convert_alpha()
+floor_sign_23 = load("images/2-3F.jfif").convert_alpha()
+floor_sign_34 = load("images/3-4F.jfif").convert_alpha()
+floor_sign_44 = load("images/4-4F.jfif").convert_alpha()
+warning_image = load("images/warning.png").convert_alpha()
+thank_list = load("images/thank_list.png").convert_alpha()
 arrow_down = scale(arrow_down, (60 * display_ratio, 40 * display_ratio))
 arrow_up = scale(arrow_up, (60 * display_ratio, 40 * display_ratio))
 floor_sign_12 = scale(floor_sign_12, (33 * display_ratio, 33 * display_ratio))
@@ -92,25 +92,25 @@ set_icon(logo) # pygame.display.set_icon
 
 # Objects
 keys = []
-quit_icon = load("images\\quit.png").convert_alpha() # pygame.image.load()
+quit_icon = load("images/quit.png").convert_alpha() # pygame.image.load()
 quit_icon = scale(quit_icon, (60 * display_ratio, 24 * display_ratio)) # pygame.transform.scale
 
 
 
-player_front = load("images\\8bit\\player_front.png").convert_alpha()
-player_left0 = load("images\\8bit\\player_left0.png").convert_alpha()
-player_left1 = load("images\\8bit\\player_left1.png").convert_alpha()
-player_left2 = load("images\\8bit\\player_left2.png").convert_alpha()
-player_right0 = load("images\\8bit\\player_right0.png").convert_alpha()
-player_right1 = load("images\\8bit\\player_right1.png").convert_alpha()
-player_right2 = load("images\\8bit\\player_right2.png").convert_alpha()
-foxxy_left0 = load("images\\8bit\\foxxy_left0.png").convert_alpha()
-foxxy_left1 = load("images\\8bit\\foxxy_left1.png").convert_alpha()
-foxxy_right0 = load("images\\8bit\\foxxy_right0.png").convert_alpha()
-foxxy_right1 = load("images\\8bit\\foxxy_right1.png").convert_alpha()
-tp_point_image1 = load("images\\tp1.png").convert_alpha()
-tp_point_image2 = load("images\\tp2.png").convert_alpha()
-key_f = load("images\\key_f.png").convert_alpha()
+player_front = load("images/8bit/player_front.png").convert_alpha()
+player_left0 = load("images/8bit/player_left0.png").convert_alpha()
+player_left1 = load("images/8bit/player_left1.png").convert_alpha()
+player_left2 = load("images/8bit/player_left2.png").convert_alpha()
+player_right0 = load("images/8bit/player_right0.png").convert_alpha()
+player_right1 = load("images/8bit/player_right1.png").convert_alpha()
+player_right2 = load("images/8bit/player_right2.png").convert_alpha()
+foxxy_left0 = load("images/8bit/foxxy_left0.png").convert_alpha()
+foxxy_left1 = load("images/8bit/foxxy_left1.png").convert_alpha()
+foxxy_right0 = load("images/8bit/foxxy_right0.png").convert_alpha()
+foxxy_right1 = load("images/8bit/foxxy_right1.png").convert_alpha()
+tp_point_image1 = load("images/tp1.png").convert_alpha()
+tp_point_image2 = load("images/tp2.png").convert_alpha()
+key_f = load("images/key_f.png").convert_alpha()
 
 player_front = scale(player_front, (70 * display_ratio, 98 * display_ratio)) # 450 * 11/38 * display_ratio
 player_left0 = scale(player_left0, (65 * display_ratio, 98 * display_ratio))
@@ -127,11 +127,11 @@ tp_point_image1 = scale(tp_point_image1, (100 * display_ratio, 100 * display_rat
 tp_point_image2 = scale(tp_point_image2, (100 * display_ratio, 100 * display_ratio))
 key_f = scale(key_f, (30 * display_ratio, 30 * display_ratio))
 
-foxyy_8bit = load("images\\8bit\\Foxxy_8bit.png").convert_alpha()
-bamboo_8bit = load("images\\8bit\\Bamboo_8bit.png").convert_alpha()
-bright_8bit = load("images\\8bit\\Bright_8bit.png").convert_alpha()
-dianGod_8bit = load("images\\8bit\\DianGod_8bit.png").convert_alpha()
-fire_8bit = load("images\\8bit\\Fire_8bit.png").convert_alpha()
+foxyy_8bit = load("images/8bit/Foxxy_8bit.png").convert_alpha()
+bamboo_8bit = load("images/8bit/Bamboo_8bit.png").convert_alpha()
+bright_8bit = load("images/8bit/Bright_8bit.png").convert_alpha()
+dianGod_8bit = load("images/8bit/DianGod_8bit.png").convert_alpha()
+fire_8bit = load("images/8bit/Fire_8bit.png").convert_alpha()
 
 foxyy_8bit = scale(foxyy_8bit, (80 * display_ratio, 98 * display_ratio))
 bamboo_8bit = scale(bamboo_8bit, (80 * display_ratio, 98 * display_ratio))
@@ -145,26 +145,26 @@ npc_images = [foxyy_8bit, foxyy_8bit, bright_8bit, bamboo_8bit, dianGod_8bit, fi
 
 
 # characters
-player_0 = load("images\\character\\player\\player_0.png").convert_alpha()
-player_1 = load("images\\character\\player\\player_1.png").convert_alpha()
-player_2 = load("images\\character\\player\\player_2.png").convert_alpha()
-bright_0 = load("images\\character\\bright\\bright_0.png").convert_alpha()
-bright_1 = load("images\\character\\bright\\bright_1.png").convert_alpha()
-bright_2 = load("images\\character\\bright\\bright_2.png").convert_alpha()
-bright_3 = load("images\\character\\bright\\bright_3.png").convert_alpha()
-bamboo_0 = load("images\\character\\bamboo\\bamboo_0.png").convert_alpha()
-bamboo_1 = load("images\\character\\bamboo\\bamboo_1.png").convert_alpha()
-bamboo_2 = load("images\\character\\bamboo\\bamboo_2.png").convert_alpha()
-bamboo_3 = load("images\\character\\bamboo\\bamboo_3.png").convert_alpha()
-diangod_0 = load("images\\character\\diangod\\diangod_0.png").convert_alpha()
-diangod_1 = load("images\\character\\diangod\\diangod_1.png").convert_alpha()
-diangod_2 = load("images\\character\\diangod\\diangod_2.png").convert_alpha()
-fire_0 = load("images\\character\\fire\\fire_0.png").convert_alpha()
-fire_1 = load("images\\character\\fire\\fire_1.png").convert_alpha()
-fire_2 = load("images\\character\\fire\\fire_2.png").convert_alpha()
-foxxy_0 = load("images\\character\\foxxy\\foxxy_0.png").convert_alpha()
-foxxy_1 = load("images\\character\\foxxy\\foxxy_1.png").convert_alpha()
-foxxy_2 = load("images\\character\\foxxy\\foxxy_2.png").convert_alpha()
+player_0 = load("images/character/player/player_0.png").convert_alpha()
+player_1 = load("images/character/player/player_1.png").convert_alpha()
+player_2 = load("images/character/player/player_2.png").convert_alpha()
+bright_0 = load("images/character/bright/bright_0.png").convert_alpha()
+bright_1 = load("images/character/bright/bright_1.png").convert_alpha()
+bright_2 = load("images/character/bright/bright_2.png").convert_alpha()
+bright_3 = load("images/character/bright/bright_3.png").convert_alpha()
+bamboo_0 = load("images/character/bamboo/bamboo_0.png").convert_alpha()
+bamboo_1 = load("images/character/bamboo/bamboo_1.png").convert_alpha()
+bamboo_2 = load("images/character/bamboo/bamboo_2.png").convert_alpha()
+bamboo_3 = load("images/character/bamboo/bamboo_3.png").convert_alpha()
+diangod_0 = load("images/character/diangod/diangod_0.png").convert_alpha()
+diangod_1 = load("images/character/diangod/diangod_1.png").convert_alpha()
+diangod_2 = load("images/character/diangod/diangod_2.png").convert_alpha()
+fire_0 = load("images/character/fire/fire_0.png").convert_alpha()
+fire_1 = load("images/character/fire/fire_1.png").convert_alpha()
+fire_2 = load("images/character/fire/fire_2.png").convert_alpha()
+foxxy_0 = load("images/character/foxxy/foxxy_0.png").convert_alpha()
+foxxy_1 = load("images/character/foxxy/foxxy_1.png").convert_alpha()
+foxxy_2 = load("images/character/foxxy/foxxy_2.png").convert_alpha()
 
 
 player_0 = scale(player_0, (200 * display_ratio, 300 * display_ratio))
@@ -194,12 +194,12 @@ mode = "normal"
 drop_before_arrive = 0.8
 pixel_per_second = 300 * display_ratio / drop_before_arrive
 
-mayo = load("images\mayo.webp") # pygame.image.load()
+mayo = load("images/mayo.webp") # pygame.image.load()
 mayo.convert()
-start_menu = load("images\patrick_mayo.jpg")
+start_menu = load("images/patrick_mayo.jpg")
 start_menu.convert()
 start_menu = scale(start_menu, (640 * display_ratio, 360 * display_ratio)) # pygame.transform.scale
-start_button = load("images\start_button.png")
+start_button = load("images/start_button.png")
 start_button.convert()
 start_button = scale(start_button, (335, 140))
 mayo = rotate(mayo, 90) # pygame.transform.rotate
@@ -214,21 +214,21 @@ display_pressed1 = Rect(183 * display_ratio + 150, 300 * display_ratio, slot[0],
 display_pressed2 = Rect(183 * display_ratio + 275, 300 * display_ratio, slot[0], slot[1])
 display_pressed3 = Rect(183 * display_ratio + 400, 300 * display_ratio, slot[0], slot[1])
 display_pressed4 = Rect(183 * display_ratio + 525, 300 * display_ratio, slot[0], slot[1])
-music_mp3 = "images\\ver.hard.mp3"
+music_mp3 = "images/ver.hard.mp3"
 track = music.load(music_mp3) # pygame.mixer.music.load()
 
 times_arrive = []
 times_drop = []
 notes = []
 note_dict = {64:0, 192:1, 320:2, 448:3}
-with open(f"note_and_time\\times_{mode}.txt", "r") as time_f:
+with open(f"note_and_time/times_{mode}.txt", "r") as time_f:
     for i in time_f:
         i = int(i)
         i /= 1000
         i = round(i, 4)
         times_arrive.append(i)
 
-with open(f"note_and_time\\notes_{mode}.txt", "r") as note_f:
+with open(f"note_and_time/notes_{mode}.txt", "r") as note_f:
     for i in note_f:
         i = int(i)
         i = note_dict[i]
@@ -403,7 +403,7 @@ def mayo_main():
 # GOD CLASS # 290 ~ # 774
 class Plot :
     def plot_1(self):
-        plot_1_0 = load("images\\plot\\plot_1_0.png")
+        plot_1_0 = load("images/plot/plot_1_0.png")
         if display_ratio == 2:
             plot_1_0 = scale(plot_1_0, (1280, 720))
         # screen.blit(player_image, (0,0))
@@ -417,8 +417,8 @@ class Plot :
         # update()
         # check_mouse()
     def plot_2(self):
-        plot_2_0 = load("images\\plot\\plot_2_0.png")
-        plot_2_1 = load("images\\plot\\plot_2_1.png")
+        plot_2_0 = load("images/plot/plot_2_0.png")
+        plot_2_1 = load("images/plot/plot_2_1.png")
         if display_ratio == 2:
             plot_2_0 = scale(plot_2_0, (1280, 720))
             plot_2_1 = scale(plot_2_1, (1280, 720))
@@ -430,21 +430,21 @@ class Plot :
         update()
         check_mouse()
     def plot_3(self):
-        plot_3_0 = load("images\\plot\\plot_3_0.png")
+        plot_3_0 = load("images/plot/plot_3_0.png")
         if display_ratio == 2:
             plot_3_0 = scale(plot_3_0, (1280, 720))
         screen.blit(plot_3_0, (0,0)) # 發現我們其實是自己人後，Bamboo向你道歉，並將出口恢復成原樣。於是你和foxyy最後終於到達四樓了，但是，在準備進入電腦教室前，突然有人從教室裡走出來，他是剛才電神旁的小弟。
         update()
         check_mouse()
     def plot_4(self):
-        plot_4_0 = load("images\\plot\\plot_4_0.png")
+        plot_4_0 = load("images/plot/plot_4_0.png")
         if display_ratio == 2:
             plot_4_0 = scale(plot_4_0, (1280, 720))
         screen.blit(plot_4_0, (0,0)) # 你不了解她說的意思，直到看見她手中的閃電，你才終於發現了異常。foxyy脱去女裝，周圍爆發出閃電
         update()
         check_mouse()
     def plot_5(self):
-        plot_5_0 = load("images\\plot\\plot_5_0.png")
+        plot_5_0 = load("images/plot/plot_5_0.png")
         if display_ratio == 2:
             plot_5_0 = scale(plot_5_0, (1280, 720))
         screen.blit(Hfoxxy_background, (0, 0))
@@ -455,9 +455,9 @@ class Plot :
 
 class Dialogue :
     def dia_1(self):
-        dia_1_0 = load("images\\dia\\dia_1\\dia_1_0.png")
-        dia_1_1 = load("images\\dia\\dia_1\\dia_1_1.png")
-        dia_1_2 = load("images\\dia\\dia_1\\dia_1_2.png")
+        dia_1_0 = load("images/dia/dia_1/dia_1_0.png")
+        dia_1_1 = load("images/dia/dia_1/dia_1_1.png")
+        dia_1_2 = load("images/dia/dia_1/dia_1_2.png")
         if display_ratio == 2:
             dia_1_0 = scale(dia_1_0, (1280, 720))
             dia_1_1 = scale(dia_1_1, (1280, 720))
@@ -486,10 +486,10 @@ class Dialogue :
 
 
     def dia_2(self):
-        dia_2_0 = load("images\\dia\\dia_2\\dia_2_0.png")
-        dia_2_1 = load("images\\dia\\dia_2\\dia_2_1.png")
-        dia_2_2 = load("images\\dia\\dia_2\\dia_2_2.png")
-        dia_2_3 = load("images\\dia\\dia_2\\dia_2_3.png")
+        dia_2_0 = load("images/dia/dia_2/dia_2_0.png")
+        dia_2_1 = load("images/dia/dia_2/dia_2_1.png")
+        dia_2_2 = load("images/dia/dia_2/dia_2_2.png")
+        dia_2_3 = load("images/dia/dia_2/dia_2_3.png")
         if display_ratio == 2:
             dia_2_0 = scale(dia_2_0, (1280, 720))
             dia_2_1 = scale(dia_2_1, (1280, 720))
@@ -523,13 +523,13 @@ class Dialogue :
 
 
     def dia_3(self):
-        dia_3_0 = load("images\\dia\\dia_3\\dia_3_0.png")
-        dia_3_1 = load("images\\dia\\dia_3\\dia_3_1.png")
-        dia_3_2 = load("images\\dia\\dia_3\\dia_3_2.png")
-        dia_3_3 = load("images\\dia\\dia_3\\dia_3_3.png")
-        dia_3_4 = load("images\\dia\\dia_3\\dia_3_4.png")
-        dia_3_5 = load("images\\dia\\dia_3\\dia_3_5.png")
-        # dia_3_6 = load("images\\dia\\dia_3\\dia_3_6.png")
+        dia_3_0 = load("images/dia/dia_3/dia_3_0.png")
+        dia_3_1 = load("images/dia/dia_3/dia_3_1.png")
+        dia_3_2 = load("images/dia/dia_3/dia_3_2.png")
+        dia_3_3 = load("images/dia/dia_3/dia_3_3.png")
+        dia_3_4 = load("images/dia/dia_3/dia_3_4.png")
+        dia_3_5 = load("images/dia/dia_3/dia_3_5.png")
+        # dia_3_6 = load("images/dia/dia_3/dia_3_6.png")
         if display_ratio == 2:
             dia_3_0 = scale(dia_3_0, (1280, 720))
             dia_3_1 = scale(dia_3_1, (1280, 720))
@@ -588,9 +588,9 @@ class Dialogue :
 
 
     def dia_4(self):
-        dia_4_0 = load("images\\dia\\dia_4\\dia_4_0.png")
-        dia_4_1 = load("images\\dia\\dia_4\\dia_4_1.png")
-        dia_4_2 = load("images\\dia\\dia_4\\dia_4_2.png")
+        dia_4_0 = load("images/dia/dia_4/dia_4_0.png")
+        dia_4_1 = load("images/dia/dia_4/dia_4_1.png")
+        dia_4_2 = load("images/dia/dia_4/dia_4_2.png")
         if display_ratio == 2:
             dia_4_0 = scale(dia_4_0, (1280, 720))
             dia_4_1 = scale(dia_4_1, (1280, 720))
@@ -618,9 +618,9 @@ class Dialogue :
 
 
     def dia_5(self):
-        dia_5_0 = load("images\\dia\\dia_5\\dia_5_0.png")
-        dia_5_1 = load("images\\dia\\dia_5\\dia_5_1.png")
-        dia_5_2 = load("images\\dia\\dia_5\\dia_5_2.png")
+        dia_5_0 = load("images/dia/dia_5/dia_5_0.png")
+        dia_5_1 = load("images/dia/dia_5/dia_5_1.png")
+        dia_5_2 = load("images/dia/dia_5/dia_5_2.png")
         if display_ratio == 2:
             dia_5_0 = scale(dia_5_0, (1280, 720))
             dia_5_1 = scale(dia_5_1, (1280, 720))
@@ -649,19 +649,19 @@ class Dialogue :
 
 
     def dia_6(self):
-        dia_6_0 = load("images\\dia\\dia_6\\dia_6_0.png")
-        dia_6_1 = load("images\\dia\\dia_6\\dia_6_1.png")
-        dia_6_2 = load("images\\dia\\dia_6\\dia_6_2.png")
-        dia_6_3 = load("images\\dia\\dia_6\\dia_6_3.png")
-        dia_6_4 = load("images\\dia\\dia_6\\dia_6_4.png")
-        dia_6_5 = load("images\\dia\\dia_6\\dia_6_5.png")
-        dia_6_6 = load("images\\dia\\dia_6\\dia_6_6.png")
-        dia_6_7 = load("images\\dia\\dia_6\\dia_6_7.png")
-        dia_6_8 = load("images\\dia\\dia_6\\dia_6_8.png")
-        dia_6_9 = load("images\\dia\\dia_6\\dia_6_9.png")
-        dia_6_10 = load("images\\dia\\dia_6\\dia_6_10.png")
-        dia_6_11 = load("images\\dia\\dia_6\\dia_6_11.png")
-        dia_6_12 = load("images\\dia\\dia_6\\dia_6_12.png")
+        dia_6_0 = load("images/dia/dia_6/dia_6_0.png")
+        dia_6_1 = load("images/dia/dia_6/dia_6_1.png")
+        dia_6_2 = load("images/dia/dia_6/dia_6_2.png")
+        dia_6_3 = load("images/dia/dia_6/dia_6_3.png")
+        dia_6_4 = load("images/dia/dia_6/dia_6_4.png")
+        dia_6_5 = load("images/dia/dia_6/dia_6_5.png")
+        dia_6_6 = load("images/dia/dia_6/dia_6_6.png")
+        dia_6_7 = load("images/dia/dia_6/dia_6_7.png")
+        dia_6_8 = load("images/dia/dia_6/dia_6_8.png")
+        dia_6_9 = load("images/dia/dia_6/dia_6_9.png")
+        dia_6_10 = load("images/dia/dia_6/dia_6_10.png")
+        dia_6_11 = load("images/dia/dia_6/dia_6_11.png")
+        dia_6_12 = load("images/dia/dia_6/dia_6_12.png")
         if display_ratio == 2:
             dia_6_0 = scale(dia_6_0, (1280, 720))
             dia_6_1 = scale(dia_6_1, (1280, 720))
@@ -766,18 +766,18 @@ class Dialogue :
 
 
     def dia_7(self):
-        dia_7_0 = load("images\\dia\\dia_7\\dia_7_0.png")
-        dia_7_1 = load("images\\dia\\dia_7\\dia_7_1.png")
-        dia_7_2 = load("images\\dia\\dia_7\\dia_7_2.png")
-        dia_7_3 = load("images\\dia\\dia_7\\dia_7_3.png")
-        dia_7_4 = load("images\\dia\\dia_7\\dia_7_4.png")
-        dia_7_5 = load("images\\dia\\dia_7\\dia_7_5.png")
-        dia_7_6 = load("images\\dia\\dia_7\\dia_7_6.png")
-        dia_7_7 = load("images\\dia\\dia_7\\dia_7_7.png")
-        dia_7_8 = load("images\\dia\\dia_7\\dia_7_8.png")
-        dia_7_9 = load("images\\dia\\dia_7\\dia_7_9.png")
-        dia_7_10 = load("images\\dia\\dia_7\\dia_7_10.png")
-        dia_7_11 = load("images\\dia\\dia_7\\dia_7_11.png")
+        dia_7_0 = load("images/dia/dia_7/dia_7_0.png")
+        dia_7_1 = load("images/dia/dia_7/dia_7_1.png")
+        dia_7_2 = load("images/dia/dia_7/dia_7_2.png")
+        dia_7_3 = load("images/dia/dia_7/dia_7_3.png")
+        dia_7_4 = load("images/dia/dia_7/dia_7_4.png")
+        dia_7_5 = load("images/dia/dia_7/dia_7_5.png")
+        dia_7_6 = load("images/dia/dia_7/dia_7_6.png")
+        dia_7_7 = load("images/dia/dia_7/dia_7_7.png")
+        dia_7_8 = load("images/dia/dia_7/dia_7_8.png")
+        dia_7_9 = load("images/dia/dia_7/dia_7_9.png")
+        dia_7_10 = load("images/dia/dia_7/dia_7_10.png")
+        dia_7_11 = load("images/dia/dia_7/dia_7_11.png")
         if display_ratio == 2:
             dia_7_0 = scale(dia_7_0, (1280, 720))
             dia_7_1 = scale(dia_7_1, (1280, 720))
@@ -868,8 +868,8 @@ class Dialogue :
 
 
     def dia_8(self):
-        dia_8_0 = load("images\\dia\\dia_8\\dia_8_0.png")
-        dia_8_1 = load("images\\dia\\dia_8\\dia_8_1.png")
+        dia_8_0 = load("images/dia/dia_8/dia_8_0.png")
+        dia_8_1 = load("images/dia/dia_8/dia_8_1.png")
         if display_ratio == 2:
             dia_8_0 = scale(dia_8_0, (1280, 720))
             dia_8_1 = scale(dia_8_1, (1280, 720))
@@ -888,7 +888,7 @@ class Dialogue :
 
 
     def dia_9(self):
-        dia_9_0 = load("images\\dia\\dia_9\\dia_9_0.png")
+        dia_9_0 = load("images/dia/dia_9/dia_9_0.png")
         if display_ratio == 2:
             dia_9_0 = scale(dia_9_0, (1280, 720))
         
@@ -900,11 +900,11 @@ class Dialogue :
 
 
     def dia_10(self):
-        dia_10_0 = load("images\\dia\\dia_10\\dia_10_0.png")
-        dia_10_1 = load("images\\dia\\dia_10\\dia_10_1.png")
-        dia_10_2 = load("images\\dia\\dia_10\\dia_10_2.png")
-        dia_10_3 = load("images\\dia\\dia_10\\dia_10_3.png")
-        dia_10_4 = load("images\\dia\\dia_10\\dia_10_4.png")
+        dia_10_0 = load("images/dia/dia_10/dia_10_0.png")
+        dia_10_1 = load("images/dia/dia_10/dia_10_1.png")
+        dia_10_2 = load("images/dia/dia_10/dia_10_2.png")
+        dia_10_3 = load("images/dia/dia_10/dia_10_3.png")
+        dia_10_4 = load("images/dia/dia_10/dia_10_4.png")
         if display_ratio == 2:
             dia_10_0 = scale(dia_10_0, (1280, 720))
             dia_10_1 = scale(dia_10_1, (1280, 720))
@@ -943,10 +943,10 @@ class Dialogue :
 
 
     def dia_11(self):
-        dia_11_0 = load("images\\dia\\dia_11\\dia_11_0.png")
-        dia_11_1 = load("images\\dia\\dia_11\\dia_11_1.png")
-        dia_11_2 = load("images\\dia\\dia_11\\dia_11_2.png")
-        dia_11_3 = load("images\\dia\\dia_11\\dia_11_3.png")
+        dia_11_0 = load("images/dia/dia_11/dia_11_0.png")
+        dia_11_1 = load("images/dia/dia_11/dia_11_1.png")
+        dia_11_2 = load("images/dia/dia_11/dia_11_2.png")
+        dia_11_3 = load("images/dia/dia_11/dia_11_3.png")
         if display_ratio == 2:
             dia_11_0 = scale(dia_11_0, (1280, 720))
             dia_11_1 = scale(dia_11_1, (1280, 720))
